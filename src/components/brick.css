@@ -1,0 +1,9 @@
+.container {
+  background-color: #C0C0C0;
+  border-color: #DFDFDF #808080 #808080 #DFDFDF;
+  border-style: solid;
+  border-width: medium;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+}

@@ -1,4 +1,5 @@
 import React from "react";
+import Brick from "./Brick";
 import "./app.css";
 
 class App extends React.Component {
@@ -8,7 +9,9 @@ class App extends React.Component {
 
   render() {
     return (
-      <div styleName="winmine-app-container">'123'</div>
+      <div styleName="winmine-app-container">
+        <Brick />
+      </div>
     );
   }
 }

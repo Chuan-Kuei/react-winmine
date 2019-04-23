@@ -7,7 +7,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
+          "style-loader",
           {
             loader: "css-loader",
             options: {
@@ -25,10 +25,7 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              plugins: [
-                "@babel/transform-react-jsx",
-                "react-css-modules"
-              ]
+              plugins: ["@babel/transform-react-jsx", "react-css-modules"]
             }
           }
         ]

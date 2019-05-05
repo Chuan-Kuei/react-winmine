@@ -3,4 +3,6 @@
   height: 44px;
   position: relative;
   background-color: black;
+  display: inline-block;
+  border: 2px solid black;
 }

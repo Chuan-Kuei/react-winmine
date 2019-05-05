@@ -7,7 +7,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      number: 0
+      time: 0,
+      firstTime: 0,
+      secondTime: 0,
+      thirdTime: 0
     };
     this.timer = this.timer.bind(this);
     this.timerTask;
@@ -24,17 +27,28 @@ class App extends React.Component {
   }
 
   timer() {
-    const { number } = this.state;
-    const nextNumber = (number + 1) % 10;
-    this.setState({ number: nextNumber });
+    const { time } = this.state;
+    const nextNumber = time + 1;
+
+    this.setState({
+      time: nextNumber,
+      firstTime: ~~((nextNumber / 100) % 10),
+      secondTime: ~~((nextNumber / 10) % 10),
+      thirdTime: nextNumber % 10
+    });
   }
 
   render() {
-    const { number } = this.state;
+    const { time, firstTime, secondTime, thirdTime } = this.state;
     return (
       <div styleName="winmine-app-container">
+        <DigitalNumber value={0} />
+        <DigitalNumber value={0} />
+        <DigitalNumber value={0} />
         <Brick />
-        <DigitalNumber value={number} />
+        <DigitalNumber value={firstTime} />
+        <DigitalNumber value={secondTime} />
+        <DigitalNumber value={thirdTime} />
       </div>
     );
   }

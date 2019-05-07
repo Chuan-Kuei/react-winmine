@@ -2,53 +2,56 @@ import React from "react";
 import Brick from "./Brick";
 import DigitalNumber from "./digitalNumber";
 import "./app.css";
-
+const defaultState = {
+  time: 0,
+  hundreds: 0,
+  tens: 0,
+  ones: 0,
+  timerTask: undefined
+};
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      time: 0,
-      firstTime: 0,
-      secondTime: 0,
-      thirdTime: 0
-    };
+    this.state = defaultState;
     this.timer = this.timer.bind(this);
-    this.timerTask;
   }
 
   componentDidMount() {
-    this.timerTask = setInterval(this.timer, 1000);
+    const timerTask = setInterval(this.timer, 1000);
+    this.setState({
+      timerTask
+    });
   }
 
-  componentWillMount() {
-    if (this.timerTask) {
-      clearInterval(this.timerTask);
+  componentWillUnmount() {
+    const { timerTask } = this.state;
+    if (timerTask) {
+      clearInterval(timerTask);
     }
   }
 
   timer() {
-    const { time } = this.state;
+    const { time, timerTask } = this.state;
     const nextNumber = time + 1;
-
     this.setState({
       time: nextNumber,
-      firstTime: ~~((nextNumber / 100) % 10),
-      secondTime: ~~((nextNumber / 10) % 10),
-      thirdTime: nextNumber % 10
+      hundreds: ~~((nextNumber / 100) % 10),
+      tens: ~~((nextNumber / 10) % 10),
+      ones: nextNumber % 10
     });
   }
 
   render() {
-    const { time, firstTime, secondTime, thirdTime } = this.state;
+    const { time, hundreds, tens, ones } = this.state;
     return (
       <div styleName="winmine-app-container">
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
         <Brick />
-        <DigitalNumber value={firstTime} />
-        <DigitalNumber value={secondTime} />
-        <DigitalNumber value={thirdTime} />
+        <DigitalNumber value={hundreds} />
+        <DigitalNumber value={tens} />
+        <DigitalNumber value={ones} />
       </div>
     );
   }

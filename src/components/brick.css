@@ -1,9 +1,33 @@
 .container {
-  background-color: #C0C0C0;
-  border-color: #DFDFDF #808080 #808080 #DFDFDF;
+  background-color: #c0c0c0;
+  border-color: #dfdfdf #808080 #808080 #dfdfdf;
   border-style: solid;
   border-width: medium;
   width: 10px;
   height: 10px;
   display: inline-block;
+}
+
+.container:active {
+  background: #c0c0c0;
+  border-color: #858585;
+  border-width: thin;
+  width: 14px;
+  height: 14px;
+}
+
+.container:focus {
+  background: #c0c0c0;
+  border-color: #858585;
+  border-width: thin;
+  width: 14px;
+  height: 14px;
+}
+
+.container.broken {
+  background: #c0c0c0;
+  border-color: #858585;
+  border-width: thin;
+  width: 14px;
+  height: 14px;
 }

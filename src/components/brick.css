@@ -3,31 +3,42 @@
   border-color: #dfdfdf #808080 #808080 #dfdfdf;
   border-style: solid;
   border-width: medium;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   display: inline-block;
+  position: relative;
 }
 
 .container:active {
   background: #c0c0c0;
   border-color: #858585;
   border-width: thin;
-  width: 14px;
-  height: 14px;
+  width: 19px;
+  height: 19px;
 }
 
 .container:focus {
   background: #c0c0c0;
   border-color: #858585;
   border-width: thin;
-  width: 14px;
-  height: 14px;
+  width: 19px;
+  height: 19px;
 }
 
 .container.broken {
   background: #c0c0c0;
   border-color: #858585;
   border-width: thin;
-  width: 14px;
-  height: 14px;
+  width: 19px;
+  height: 19px;
+}
+
+.container > span {
+  position: absolute;
+  left: 3.5px;
+  bottom: -2px;
+  color: #0302c5;
+  font-weight: bolder;
+  font-family: monospace;
+  font-size: x-large;
 }

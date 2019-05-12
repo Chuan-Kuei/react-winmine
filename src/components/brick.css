@@ -7,38 +7,51 @@
   height: 15px;
   display: inline-block;
   position: relative;
-}
 
-.container:active {
-  background: #c0c0c0;
-  border-color: #858585;
-  border-width: thin;
-  width: 19px;
-  height: 19px;
-}
+  &:active,
+  &:focus,
+  &.broken {
+    background: #c0c0c0;
+    border-color: #858585;
+    border-width: thin;
+    width: 19px;
+    height: 19px;
+  }
 
-.container:focus {
-  background: #c0c0c0;
-  border-color: #858585;
-  border-width: thin;
-  width: 19px;
-  height: 19px;
-}
+  &.broken {
+    &.one > span {
+      color: #0302c5;
+    }
+    &.two > span {
+      color: #217619;
+    }
+    &.three > span {
+      color: #d31f27;
+    }
+    &.four > span {
+      color: #060280;
+    }
+    &.five > span {
+      color: #5d2217;
+    }
+    &.six > span {
+      color: #147879;
+    }
+    &.seven > span {
+      color: #050505;
+    }
+    &.eight > span {
+      color: #808080;
+    }
+  }
 
-.container.broken {
-  background: #c0c0c0;
-  border-color: #858585;
-  border-width: thin;
-  width: 19px;
-  height: 19px;
-}
-
-.container > span {
-  position: absolute;
-  left: 3.5px;
-  bottom: -2px;
-  color: #0302c5;
-  font-weight: bolder;
-  font-family: monospace;
-  font-size: x-large;
+  > span {
+    position: absolute;
+    left: 3.5px;
+    bottom: -2px;
+    color: #0302c5;
+    font-weight: bolder;
+    font-family: monospace;
+    font-size: x-large;
+  }
 }

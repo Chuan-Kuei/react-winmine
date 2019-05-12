@@ -2,6 +2,7 @@ import React from "react";
 import Brick from "./Brick";
 import DigitalNumber from "./digitalNumber";
 import "./app.css";
+import Mine from "../businessLogic/Mine";
 const defaultState = {
   time: 0,
   hundreds: 0,
@@ -18,6 +19,9 @@ class App extends React.Component {
 
   componentDidMount() {
     const timerTask = setInterval(this.timer, 1000);
+    const mine = new Mine(8, 8, 10);
+    mine.createMineMap();
+    this.mineMap = mine.getMineMap();
     this.setState({
       timerTask
     });
@@ -43,15 +47,17 @@ class App extends React.Component {
 
   render() {
     const { time, hundreds, tens, ones } = this.state;
+    const mineMap = this.mineMap;
     return (
       <div styleName="winmine-app-container">
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
-        <Brick />
         <DigitalNumber value={hundreds} />
         <DigitalNumber value={tens} />
         <DigitalNumber value={ones} />
+        <div />
+        <Brick value={ones} />
       </div>
     );
   }

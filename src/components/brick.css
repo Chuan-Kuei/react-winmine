@@ -19,6 +19,12 @@
   }
 
   &.broken {
+    &.mine > span {
+      color: black;
+    }
+    &.zero > span {
+      display: none;
+    }
     &.one > span {
       color: #0302c5;
     }

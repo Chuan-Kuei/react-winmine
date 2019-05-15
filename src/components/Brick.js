@@ -1,6 +1,8 @@
 import React from "react";
 import "./brick.css";
 const VALUE_STYLE_MAP = {
+  "-1": "mine",
+  0: "zero",
   1: "one",
   2: "two",
   3: "three",
@@ -11,13 +13,18 @@ const VALUE_STYLE_MAP = {
   8: "eight"
 };
 
-export default ({ broken, value }) => {
-  let styleName = true ? "container broken " : "container ";
-  const fontColorStyle = VALUE_STYLE_MAP[value] ? VALUE_STYLE_MAP[value] : "";
-  styleName = styleName + fontColorStyle;
+const Brick = ({ broken = false, value, onClick: handleBrickBroken }) => {
+  let styleName = broken ? "container broken " : "container ";
+  const valueShow = value === -1 ? "*" : value;
+  if (broken) {
+    const fontColorStyle = VALUE_STYLE_MAP[value] ? VALUE_STYLE_MAP[value] : "";
+    styleName = styleName + fontColorStyle;
+  }
   return (
-    <div styleName={styleName}>
-      <span>{value}</span>
+    <div styleName={styleName} onClick={handleBrickBroken}>
+      {broken && <span>{valueShow}</span>}
     </div>
   );
 };
+
+export default Brick;

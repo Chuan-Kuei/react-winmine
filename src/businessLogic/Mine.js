@@ -28,15 +28,21 @@ Mine.prototype.createTips = function() {
   const mineMap = this.mineMap;
   const width = this.width;
   this.mine.forEach(mine => {
+    const isLeftBoundary = mine % width === 0;
+    const isRightBoundary = (+mine + 1) % width === 0;
     mineMap[mine] = -1;
-    this.createTip(mine - width - 1);
     this.createTip(mine - width);
-    this.createTip(mine - width + 1);
-    this.createTip(mine - 1);
-    this.createTip(+mine + 1);
-    this.createTip(+mine + width + 1);
     this.createTip(+mine + width);
-    this.createTip(+mine + width - 1);
+    if (!isLeftBoundary) {
+      this.createTip(mine - width - 1);
+      this.createTip(mine - 1);
+      this.createTip(+mine + width - 1);
+    }
+    if (!isRightBoundary) {
+      this.createTip(mine - width + 1);
+      this.createTip(+mine + 1);
+      this.createTip(+mine + width + 1);
+    }
   });
   this.mineMap = mineMap;
 };
@@ -50,7 +56,7 @@ Mine.prototype.createTip = function(position) {
 
 Mine.prototype.initMineMap = function() {
   const mapSize = this.width * this.height;
-  this.mineMap = Array(mapSize - 1).fill(0);
+  this.mineMap = Array(mapSize).fill(0);
 };
 
 Mine.prototype.createMineMap = function() {

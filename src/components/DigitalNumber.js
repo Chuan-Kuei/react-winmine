@@ -22,7 +22,8 @@ const DIGITAL_POSITION = [
   "left-bottom",
   "middle"
 ];
-export default ({ value }) => {
+
+const DigitalNumber = ({ value }) => {
   const numberSign = DIGITAL[value];
 
   return (
@@ -36,3 +37,4 @@ export default ({ value }) => {
     </div>
   );
 };
+export default DigitalNumber;

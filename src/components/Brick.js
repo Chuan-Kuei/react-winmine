@@ -10,13 +10,19 @@ const VALUE_STYLE_MAP = {
   5: "five",
   6: "six",
   7: "seven",
-  8: "eight"
+  8: "eight",
+  smile: "smile"
 };
 
-const Brick = ({ broken = false, value, onClick: handleBrickBroken }) => {
+const Brick = ({
+  broken = false,
+  value,
+  onClick: handleBrickBroken,
+  showStyle = false
+}) => {
   let styleName = broken ? "container broken " : "container ";
   const valueShow = value === -1 ? "*" : value;
-  if (broken) {
+  if (broken || showStyle) {
     const fontColorStyle = VALUE_STYLE_MAP[value] ? VALUE_STYLE_MAP[value] : "";
     styleName = styleName + fontColorStyle;
   }

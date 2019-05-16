@@ -18,6 +18,18 @@
     height: 19px;
   }
 
+  &.smile {
+    background-image: url("../assets/smile.png");
+    background-position: center;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    &:active {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
   &.broken {
     &.mine > span {
       color: black;

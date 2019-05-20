@@ -126,7 +126,7 @@ class App extends React.Component {
     if (isBroken) {
       return;
     }
-    mineMap[position] = { ...mineMap, isMarked: !isMarked };
+    mineMap[position] = { ...mineMap[position], isMarked: !isMarked };
     this.setState({
       mineMap
     });

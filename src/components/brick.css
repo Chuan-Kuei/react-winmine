@@ -30,6 +30,30 @@
     }
   }
 
+  &.lost {
+    background-image: url("../assets/lost.png");
+    background-position: center;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    &:active {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &.winner {
+    background-image: url("../assets/win.png");
+    background-position: center;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    &:active {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
   &.flag {
     background-image: url("../assets/flag.png");
     background-position: center;

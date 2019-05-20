@@ -53,7 +53,7 @@ class App extends React.Component {
   }
 
   getMineMap() {
-    const mine = new Mine(8, 8, 1);
+    const mine = new Mine(8, 8, 10);
     mine.createMineMap();
     return mine.getMineMap().reduce((mineObj, value, position) => {
       mineObj[position] = { isBroken: false, isMarked: false, value };
@@ -146,7 +146,7 @@ class App extends React.Component {
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
-        <Brick value="smile" showStyle onClick={this.handleReset} />
+        <Brick onClick={this.handleReset} smile />
         <DigitalNumber value={hundreds} />
         <DigitalNumber value={tens} />
         <DigitalNumber value={ones} />

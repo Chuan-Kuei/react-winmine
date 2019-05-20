@@ -9,6 +9,8 @@ const defaultState = {
   hundreds: 0,
   tens: 0,
   ones: 0,
+  width: 8,
+  height: 8,
   timerTask: undefined
 };
 class App extends React.Component {
@@ -18,6 +20,8 @@ class App extends React.Component {
     this.timer = this.timer.bind(this);
     this.handleBrickBroken = this.handleBrickBroken.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.brickBrokenAround = this.brickBrokenAround.bind(this);
+    this.pushWaitingBroken = this.pushWaitingBroken.bind(this);
   }
 
   componentDidMount() {
@@ -57,12 +61,56 @@ class App extends React.Component {
   }
 
   handleBrickBroken(mine, e) {
-    const { mineMap } = this.state;
+    let { mineMap } = this.state;
     const { value } = mineMap[mine];
+    if (value === 0) {
+      mineMap = this.brickBrokenAround([mine], mineMap);
+    }
     mineMap[mine] = { ...mineMap[mine], isBroken: true };
+
     this.setState({
       mineMap
     });
+  }
+
+  pushWaitingBroken(waitingBroken, position, mineMap) {
+    if (
+      !mineMap[position] ||
+      (mineMap[position] && mineMap[position]["isBroken"]) ||
+      waitingBroken.includes(position)
+    ) {
+      return;
+    }
+    waitingBroken.push(position);
+  }
+
+  brickBrokenAround(waitingBroken, mineMap) {
+    const { width } = this.state;
+    if (waitingBroken.length === 0) {
+      return mineMap;
+    }
+    waitingBroken.forEach(b => {
+      if (mineMap[b]["value"] === 0 && !mineMap[b]["isBroken"]) {
+        const isLeftBoundary = b % width === 0;
+        const isRightBoundary = (+b + 1) % width === 0;
+        if (!isLeftBoundary) {
+          this.pushWaitingBroken(waitingBroken, +b - 1, mineMap);
+          this.pushWaitingBroken(waitingBroken, +b - 1 + width, mineMap);
+          this.pushWaitingBroken(waitingBroken, +b - 1 - width, mineMap);
+        }
+        if (!isRightBoundary) {
+          this.pushWaitingBroken(waitingBroken, +b + 1, mineMap);
+          this.pushWaitingBroken(waitingBroken, +b + 1 + width, mineMap);
+          this.pushWaitingBroken(waitingBroken, +b + 1 - width, mineMap);
+        }
+        this.pushWaitingBroken(waitingBroken, +b - width, mineMap);
+        this.pushWaitingBroken(waitingBroken, +b + width, mineMap);
+      } else {
+        waitingBroken = R.without([b], waitingBroken);
+      }
+      mineMap[b] = { ...mineMap[b], isBroken: true };
+    });
+    return this.brickBrokenAround(waitingBroken, mineMap);
   }
 
   handleReset() {
@@ -83,18 +131,20 @@ class App extends React.Component {
         <DigitalNumber value={hundreds} />
         <DigitalNumber value={tens} />
         <DigitalNumber value={ones} />
-        {mineMap &&
-          Object.keys(mineMap).map((m, index) => {
-            const { value, isBroken } = mineMap[m];
-            return (
-              <Brick
-                key={m + index}
-                value={value}
-                broken={isBroken}
-                onClick={R.curryN(2, this.handleBrickBroken)(m)}
-              />
-            );
-          })}
+        <div>
+          {mineMap &&
+            Object.keys(mineMap).map((m, index) => {
+              const { value, isBroken } = mineMap[m];
+              return (
+                <Brick
+                  key={m + index}
+                  value={value}
+                  broken={isBroken}
+                  onClick={R.curryN(2, this.handleBrickBroken)(m)}
+                />
+              );
+            })}
+        </div>
       </div>
     );
   }

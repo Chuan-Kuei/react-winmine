@@ -30,9 +30,26 @@
     }
   }
 
+  &.flag {
+    background-image: url("../assets/flag.png");
+    background-position: center;
+    background-size: contain;
+    &:active,
+    &:focus {
+      background-color: #c0c0c0;
+      border-color: #dfdfdf #808080 #808080 #dfdfdf;
+      border-width: medium;
+      width: 15px;
+      height: 15px;
+    }
+  }
+
   &.broken {
-    &.mine > span {
-      color: black;
+    &.mine {
+      background-image: url("../assets/mine.png");
+      background-position: center;
+      background-size: contain;
+      background-color: red;
     }
     &.zero > span {
       display: none;

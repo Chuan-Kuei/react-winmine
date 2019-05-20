@@ -19,6 +19,7 @@ class App extends React.Component {
     this.state = defaultState;
     this.timer = this.timer.bind(this);
     this.handleBrickBroken = this.handleBrickBroken.bind(this);
+    this.handleAddFlag = this.handleAddFlag.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.brickBrokenAround = this.brickBrokenAround.bind(this);
     this.pushWaitingBroken = this.pushWaitingBroken.bind(this);
@@ -52,17 +53,20 @@ class App extends React.Component {
   }
 
   getMineMap() {
-    const mine = new Mine(8, 8, 10);
+    const mine = new Mine(8, 8, 1);
     mine.createMineMap();
     return mine.getMineMap().reduce((mineObj, value, position) => {
-      mineObj[position] = { isBroken: false, value };
+      mineObj[position] = { isBroken: false, isMarked: false, value };
       return mineObj;
     }, {});
   }
 
   handleBrickBroken(mine, e) {
     let { mineMap } = this.state;
-    const { value } = mineMap[mine];
+    const { value, isMarked, isBroken } = mineMap[mine];
+    if (isMarked || isBroken) {
+      return;
+    }
     if (value === 0) {
       mineMap = this.brickBrokenAround([mine], mineMap);
     }
@@ -77,6 +81,7 @@ class App extends React.Component {
     if (
       !mineMap[position] ||
       (mineMap[position] && mineMap[position]["isBroken"]) ||
+      (mineMap[position] && mineMap[position]["isMarked"]) ||
       waitingBroken.includes(position)
     ) {
       return;
@@ -113,6 +118,20 @@ class App extends React.Component {
     return this.brickBrokenAround(waitingBroken, mineMap);
   }
 
+  handleAddFlag(position, e) {
+    const { mineMap } = this.state;
+    const { isBroken, isMarked } = mineMap[position];
+    e.preventDefault();
+
+    if (isBroken) {
+      return;
+    }
+    mineMap[position] = { ...mineMap, isMarked: !isMarked };
+    this.setState({
+      mineMap
+    });
+  }
+
   handleReset() {
     const mineMap = this.getMineMap();
     this.setState({
@@ -134,13 +153,15 @@ class App extends React.Component {
         <div>
           {mineMap &&
             Object.keys(mineMap).map((m, index) => {
-              const { value, isBroken } = mineMap[m];
+              const { value, isBroken, isMarked } = mineMap[m];
               return (
                 <Brick
                   key={m + index}
                   value={value}
                   broken={isBroken}
+                  marked={isMarked}
                   onClick={R.curryN(2, this.handleBrickBroken)(m)}
+                  onContextMenu={R.curryN(2, this.handleAddFlag)(m)}
                 />
               );
             })}

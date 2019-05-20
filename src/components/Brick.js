@@ -11,23 +11,38 @@ const VALUE_STYLE_MAP = {
   6: "six",
   7: "seven",
   8: "eight",
-  smile: "smile"
+  smile: "smile",
+  flag: "flag"
 };
 
 const Brick = ({
   broken = false,
-  value,
+  marked = false,
+  win = false,
+  lost = false,
   onClick: handleBrickBroken,
-  showStyle = false
+  onContextMenu: handleAddFlag,
+  value
 }) => {
-  let styleName = broken ? "container broken " : "container ";
-  const valueShow = value === -1 ? "*" : value;
-  if (broken || showStyle) {
-    const fontColorStyle = VALUE_STYLE_MAP[value] ? VALUE_STYLE_MAP[value] : "";
-    styleName = styleName + fontColorStyle;
+  const styles = ["container"];
+  if (broken) {
+    styles.push("broken");
   }
+  const valueShow = value === -1 ? "" : value;
+  if (broken) {
+    const fontColorStyle = VALUE_STYLE_MAP[value] ? VALUE_STYLE_MAP[value] : "";
+    styles.push(fontColorStyle);
+  }
+  if (marked) {
+    styles.push("flag");
+  }
+  const styleName = styles.join(" ");
   return (
-    <div styleName={styleName} onClick={handleBrickBroken}>
+    <div
+      styleName={styleName}
+      onClick={handleBrickBroken}
+      onContextMenu={handleAddFlag}
+    >
       {broken && <span>{valueShow}</span>}
     </div>
   );

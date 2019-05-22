@@ -73,7 +73,9 @@
       background-image: url("../assets/mine.png");
       background-position: center;
       background-size: contain;
-      background-color: red;
+      &.hit {
+        background-color: red;
+      }
     }
     &.zero > span {
       display: none;

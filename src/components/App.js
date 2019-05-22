@@ -11,6 +11,8 @@ const defaultState = {
   ones: 0,
   width: 8,
   height: 8,
+  gameStatus: "smile",
+  minePosition: [],
   timerTask: undefined
 };
 class App extends React.Component {
@@ -19,10 +21,12 @@ class App extends React.Component {
     this.state = defaultState;
     this.timer = this.timer.bind(this);
     this.handleBrickBroken = this.handleBrickBroken.bind(this);
+    this.handleClickMine = this.handleClickMine.bind(this);
     this.handleAddFlag = this.handleAddFlag.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.brickBrokenAround = this.brickBrokenAround.bind(this);
     this.pushWaitingBroken = this.pushWaitingBroken.bind(this);
+    this.mineMap;
   }
 
   componentDidMount() {
@@ -30,7 +34,8 @@ class App extends React.Component {
     const mineMap = this.getMineMap();
     this.setState({
       // timerTask,
-      mineMap
+      mineMap,
+      minePosition: this.mineMap.getMine()
     });
   }
 
@@ -55,25 +60,50 @@ class App extends React.Component {
   getMineMap() {
     const mine = new Mine(8, 8, 10);
     mine.createMineMap();
+    this.mineMap = mine;
     return mine.getMineMap().reduce((mineObj, value, position) => {
-      mineObj[position] = { isBroken: false, isMarked: false, value };
+      const handleClick =
+        value === -1 ? this.handleClickMine : this.handleBrickBroken;
+      mineObj[position] = {
+        isBroken: false,
+        isMarked: false,
+        hit: false,
+        value,
+        handleClick: R.curry(handleClick)(position)
+      };
       return mineObj;
     }, {});
   }
 
-  handleBrickBroken(mine, e) {
-    let { mineMap } = this.state;
-    const { value, isMarked, isBroken } = mineMap[mine];
-    if (isMarked || isBroken) {
+  handleBrickBroken(position, e) {
+    let { mineMap, gameStatus } = this.state;
+    const { value, isMarked, isBroken } = mineMap[position];
+    if (isMarked || isBroken || gameStatus === "lost") {
       return;
     }
     if (value === 0) {
-      mineMap = this.brickBrokenAround([mine], mineMap);
+      mineMap = this.brickBrokenAround([position], mineMap);
     }
-    mineMap[mine] = { ...mineMap[mine], isBroken: true };
-
+    mineMap[position] = { ...mineMap[position], isBroken: true };
     this.setState({
       mineMap
+    });
+  }
+
+  handleClickMine(position, e) {
+    const { mineMap, minePosition, gameStatus } = this.state;
+    if (gameStatus === "lost") {
+      return;
+    }
+    minePosition.forEach(m => {
+      if (!mineMap[m]["isMarked"]) {
+        mineMap[m] = { ...mineMap[m], isBroken: true };
+      }
+    });
+    mineMap[position] = { ...mineMap[position], isBroken: true, hit: true };
+    this.setState({
+      mineMap,
+      gameStatus: "lost"
     });
   }
 
@@ -135,32 +165,37 @@ class App extends React.Component {
   handleReset() {
     const mineMap = this.getMineMap();
     this.setState({
-      mineMap
+      mineMap,
+      minePosition: this.mineMap.getMine(),
+      gameStatus: "smile"
     });
   }
 
   render() {
-    const { time, hundreds, tens, ones, mineMap } = this.state;
+    const { time, hundreds, tens, ones, mineMap, gameStatus } = this.state;
     return (
       <div styleName="winmine-app-container">
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
         <DigitalNumber value={0} />
-        <Brick onClick={this.handleReset} smile />
+        <Brick onClick={this.handleReset} status={gameStatus} />
         <DigitalNumber value={hundreds} />
         <DigitalNumber value={tens} />
         <DigitalNumber value={ones} />
         <div>
           {mineMap &&
             Object.keys(mineMap).map((m, index) => {
-              const { value, isBroken, isMarked } = mineMap[m];
+              const { value, isBroken, isMarked, handleClick, hit } = mineMap[
+                m
+              ];
               return (
                 <Brick
                   key={m + index}
                   value={value}
                   broken={isBroken}
                   marked={isMarked}
-                  onClick={R.curryN(2, this.handleBrickBroken)(m)}
+                  onClick={handleClick}
+                  hit={hit}
                   onContextMenu={R.curryN(2, this.handleAddFlag)(m)}
                 />
               );

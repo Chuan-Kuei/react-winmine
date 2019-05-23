@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import "./brick.css";
 const VALUE_STYLE_MAP = {
+  "-2": "wrong_mine",
   "-1": "mine",
   0: "zero",
   1: "one",
@@ -25,7 +26,7 @@ const Brick = ({
   value
 }) => {
   const styles = ["container"];
-  const valueShow = value === -1 ? "" : value;
+  const valueShow = value === -1 || value === -2 ? "" : value;
   if (broken) {
     const fontColorStyle = VALUE_STYLE_MAP[value] ? VALUE_STYLE_MAP[value] : "";
     styles.push(fontColorStyle);

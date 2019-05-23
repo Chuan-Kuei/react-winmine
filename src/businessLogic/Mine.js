@@ -21,7 +21,7 @@ Mine.prototype.createMine = function() {
     let randomNum = ~~(Math.random() * mapSize);
     mine[randomNum] = 0;
   }
-  this.mine = Object.keys(mine);
+  this.mine = Object.keys(mine).map(k => +k);
 };
 
 Mine.prototype.createTips = function() {
@@ -29,19 +29,19 @@ Mine.prototype.createTips = function() {
   const width = this.width;
   this.mine.forEach(mine => {
     const isLeftBoundary = mine % width === 0;
-    const isRightBoundary = (+mine + 1) % width === 0;
+    const isRightBoundary = (mine + 1) % width === 0;
     mineMap[mine] = -1;
     this.createTip(mine - width);
-    this.createTip(+mine + width);
+    this.createTip(mine + width);
     if (!isLeftBoundary) {
       this.createTip(mine - width - 1);
       this.createTip(mine - 1);
-      this.createTip(+mine + width - 1);
+      this.createTip(mine + width - 1);
     }
     if (!isRightBoundary) {
       this.createTip(mine - width + 1);
-      this.createTip(+mine + 1);
-      this.createTip(+mine + width + 1);
+      this.createTip(mine + 1);
+      this.createTip(mine + width + 1);
     }
   });
   this.mineMap = mineMap;

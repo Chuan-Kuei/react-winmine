@@ -13,6 +13,7 @@ const defaultState = {
   height: 8,
   gameStatus: "smile",
   minePosition: [],
+  flagPosition: [],
   timerTask: undefined
 };
 class App extends React.Component {
@@ -69,7 +70,8 @@ class App extends React.Component {
         isMarked: false,
         hit: false,
         value,
-        handleClick: R.curry(handleClick)(position)
+        handleClick: R.curry(handleClick)(position),
+        handleAddFlag: R.curry(this.handleAddFlag)(position)
       };
       return mineObj;
     }, {});
@@ -91,7 +93,7 @@ class App extends React.Component {
   }
 
   handleClickMine(position, e) {
-    const { mineMap, minePosition, gameStatus } = this.state;
+    const { mineMap, minePosition, gameStatus, flagPosition } = this.state;
     if (gameStatus === "lost") {
       return;
     }
@@ -101,6 +103,15 @@ class App extends React.Component {
       }
     });
     mineMap[position] = { ...mineMap[position], isBroken: true, hit: true };
+    const failFlags = R.without(minePosition, flagPosition);
+    failFlags.forEach(failPosition => {
+      mineMap[failPosition] = {
+        ...mineMap[failPosition],
+        value: -2,
+        isBroken: true,
+        isMarked: false
+      };
+    });
     this.setState({
       mineMap,
       gameStatus: "lost"
@@ -127,21 +138,21 @@ class App extends React.Component {
     waitingBroken.forEach(b => {
       if (mineMap[b]["value"] === 0 && !mineMap[b]["isBroken"]) {
         const isLeftBoundary = b % width === 0;
-        const isRightBoundary = (+b + 1) % width === 0;
+        const isRightBoundary = (b + 1) % width === 0;
         if (!isLeftBoundary) {
-          this.pushWaitingBroken(waitingBroken, +b - 1, mineMap);
-          this.pushWaitingBroken(waitingBroken, +b - 1 + width, mineMap);
-          this.pushWaitingBroken(waitingBroken, +b - 1 - width, mineMap);
+          this.pushWaitingBroken(waitingBroken, b - 1, mineMap);
+          this.pushWaitingBroken(waitingBroken, b - 1 + width, mineMap);
+          this.pushWaitingBroken(waitingBroken, b - 1 - width, mineMap);
         }
         if (!isRightBoundary) {
-          this.pushWaitingBroken(waitingBroken, +b + 1, mineMap);
-          this.pushWaitingBroken(waitingBroken, +b + 1 + width, mineMap);
-          this.pushWaitingBroken(waitingBroken, +b + 1 - width, mineMap);
+          this.pushWaitingBroken(waitingBroken, b + 1, mineMap);
+          this.pushWaitingBroken(waitingBroken, b + 1 + width, mineMap);
+          this.pushWaitingBroken(waitingBroken, b + 1 - width, mineMap);
         }
-        this.pushWaitingBroken(waitingBroken, +b - width, mineMap);
-        this.pushWaitingBroken(waitingBroken, +b + width, mineMap);
+        this.pushWaitingBroken(waitingBroken, b - width, mineMap);
+        this.pushWaitingBroken(waitingBroken, b + width, mineMap);
       } else {
-        waitingBroken = R.without([b], waitingBroken);
+        waitingBroken.splice(waitingBroken.indexOf(b), 1);
       }
       mineMap[b] = { ...mineMap[b], isBroken: true };
     });
@@ -149,7 +160,7 @@ class App extends React.Component {
   }
 
   handleAddFlag(position, e) {
-    const { mineMap } = this.state;
+    const { mineMap, flagPosition } = this.state;
     const { isBroken, isMarked } = mineMap[position];
     e.preventDefault();
 
@@ -157,8 +168,14 @@ class App extends React.Component {
       return;
     }
     mineMap[position] = { ...mineMap[position], isMarked: !isMarked };
+    if (!isMarked) {
+      flagPosition.push(position);
+    } else {
+      flagPosition.splice(flagPosition.indexOf(position), 1);
+    }
     this.setState({
-      mineMap
+      mineMap,
+      flagPosition
     });
   }
 
@@ -185,9 +202,14 @@ class App extends React.Component {
         <div>
           {mineMap &&
             Object.keys(mineMap).map((m, index) => {
-              const { value, isBroken, isMarked, handleClick, hit } = mineMap[
-                m
-              ];
+              const {
+                value,
+                isBroken,
+                isMarked,
+                handleClick,
+                hit,
+                handleAddFlag
+              } = mineMap[m];
               return (
                 <Brick
                   key={m + index}
@@ -196,7 +218,7 @@ class App extends React.Component {
                   marked={isMarked}
                   onClick={handleClick}
                   hit={hit}
-                  onContextMenu={R.curryN(2, this.handleAddFlag)(m)}
+                  onContextMenu={handleAddFlag}
                 />
               );
             })}

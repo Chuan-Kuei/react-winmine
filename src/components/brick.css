@@ -77,6 +77,19 @@
         background-color: red;
       }
     }
+    &.wrong_mine {
+      background-image: url("../assets/mine.png");
+      background-position: center;
+      background-size: contain;
+      &::after {
+        content: "x";
+        color: red;
+        font-size: x-large;
+        position: absolute;
+        left: 3.7px;
+        top: -9px;
+      }
+    }
     &.zero > span {
       display: none;
     }

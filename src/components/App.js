@@ -14,6 +14,11 @@ const defaultState = {
   gameStatus: "smile",
   minePosition: [],
   flagPosition: [],
+  leftMine: {
+    one: 0,
+    ten: 1,
+    hundred: 0
+  },
   timerTask: undefined
 };
 class App extends React.Component {
@@ -160,11 +165,12 @@ class App extends React.Component {
   }
 
   handleAddFlag(position, e) {
-    const { mineMap, flagPosition } = this.state;
+    const { mineMap, flagPosition, minePosition } = this.state;
     const { isBroken, isMarked } = mineMap[position];
     e.preventDefault();
-
-    if (isBroken) {
+    const flagSize = flagPosition.length;
+    const mineSize = minePosition.length;
+    if (isBroken || (mineSize === flagSize && !isMarked)) {
       return;
     }
     mineMap[position] = { ...mineMap[position], isMarked: !isMarked };
@@ -173,28 +179,45 @@ class App extends React.Component {
     } else {
       flagPosition.splice(flagPosition.indexOf(position), 1);
     }
+    const leftMineCount = mineSize - flagPosition.length;
+
     this.setState({
       mineMap,
-      flagPosition
+      flagPosition,
+      leftMine: {
+        one: leftMineCount % 10,
+        ten: ~~((leftMineCount / 10) % 10),
+        hundred: ~~((leftMineCount / 100) % 10)
+      }
     });
   }
 
   handleReset() {
     const mineMap = this.getMineMap();
     this.setState({
+      ...defaultState,
       mineMap,
       minePosition: this.mineMap.getMine(),
-      gameStatus: "smile"
+      flagPosition: []
     });
   }
 
   render() {
-    const { time, hundreds, tens, ones, mineMap, gameStatus } = this.state;
+    const {
+      time,
+      hundreds,
+      tens,
+      ones,
+      mineMap,
+      gameStatus,
+      leftMine
+    } = this.state;
+    const { one: lone, ten: lten, hundred: lhundred } = leftMine;
     return (
       <div styleName="winmine-app-container">
-        <DigitalNumber value={0} />
-        <DigitalNumber value={0} />
-        <DigitalNumber value={0} />
+        <DigitalNumber value={lhundred} />
+        <DigitalNumber value={lten} />
+        <DigitalNumber value={lone} />
         <Brick onClick={this.handleReset} status={gameStatus} />
         <DigitalNumber value={hundreds} />
         <DigitalNumber value={tens} />

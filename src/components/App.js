@@ -99,6 +99,10 @@ class App extends React.Component {
 
   handleClickMine(position, e) {
     const { mineMap, minePosition, gameStatus, flagPosition } = this.state;
+    if (mineMap[position]["isMarked"]) {
+      return;
+    }
+
     if (gameStatus === "lost") {
       return;
     }

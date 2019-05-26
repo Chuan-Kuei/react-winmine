@@ -65,7 +65,7 @@ Brick.propTypes = {
   broken: PropTypes.bool,
   marked: PropTypes.bool,
   hit: PropTypes.bool,
-  status: PropTypes.oneOf(["smile", "win", "lost", "reset", ""]),
+  status: PropTypes.oneOf(["smile", "winner", "lost", "reset", ""]),
   onClick: PropTypes.func,
   onContextMenu: PropTypes.func,
   value: PropTypes.number

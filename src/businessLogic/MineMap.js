@@ -1,4 +1,4 @@
-function Mine(width, height, maxMine) {
+function MineMap(width, height, maxMine) {
   this.width = width;
   this.height = height;
   this.maxMine = maxMine;
@@ -6,15 +6,15 @@ function Mine(width, height, maxMine) {
   this.mine = [];
 }
 
-Mine.prototype.getMineMap = function() {
+MineMap.prototype.getMineMap = function() {
   return this.mineMap;
 };
 
-Mine.prototype.getMine = function() {
+MineMap.prototype.getMine = function() {
   return this.mine;
 };
 
-Mine.prototype.createMine = function() {
+MineMap.prototype.createMine = function() {
   const mine = {};
   const mapSize = this.width * this.height;
   while (Object.keys(mine).length < this.maxMine) {
@@ -24,7 +24,7 @@ Mine.prototype.createMine = function() {
   this.mine = Object.keys(mine).map(k => +k);
 };
 
-Mine.prototype.createTips = function() {
+MineMap.prototype.createTips = function() {
   const mineMap = this.mineMap;
   const width = this.width;
   this.mine.forEach(mine => {
@@ -47,22 +47,22 @@ Mine.prototype.createTips = function() {
   this.mineMap = mineMap;
 };
 
-Mine.prototype.createTip = function(position) {
+MineMap.prototype.createTip = function(position) {
   const mineMap = this.mineMap;
   if (mineMap[position] !== undefined && mineMap[position] !== -1) {
     mineMap[position]++;
   }
 };
 
-Mine.prototype.initMineMap = function() {
+MineMap.prototype.initMineMap = function() {
   const mapSize = this.width * this.height;
   this.mineMap = Array(mapSize).fill(0);
 };
 
-Mine.prototype.createMineMap = function() {
+MineMap.prototype.createMineMap = function() {
   this.initMineMap();
   this.createMine();
   this.createTips();
 };
 
-module.exports = Mine;
+module.exports = MineMap;

@@ -3,7 +3,7 @@ import * as R from "ramda";
 import Brick from "./Brick";
 import DigitalNumber from "./digitalNumber";
 import "./app.css";
-import Mine from "../businessLogic/Mine";
+import MineMap from "../businessLogic/MineMap";
 const defaultState = {
   time: 0,
   hundreds: 0,
@@ -11,9 +11,11 @@ const defaultState = {
   ones: 0,
   width: 8,
   height: 8,
+  mine: 10,
   gameStatus: "smile",
   minePosition: [],
   flagPosition: [],
+  brokenCount: 0,
   leftMine: {
     one: 0,
     ten: 1,
@@ -21,6 +23,7 @@ const defaultState = {
   },
   timerTask: undefined
 };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,8 +33,7 @@ class App extends React.Component {
     this.handleClickMine = this.handleClickMine.bind(this);
     this.handleAddFlag = this.handleAddFlag.bind(this);
     this.handleReset = this.handleReset.bind(this);
-    this.brickBrokenAround = this.brickBrokenAround.bind(this);
-    this.pushWaitingBroken = this.pushWaitingBroken.bind(this);
+    this.breakBrickAround = this.breakBrickAround.bind(this);
     this.mineMap;
   }
 
@@ -64,10 +66,11 @@ class App extends React.Component {
   }
 
   getMineMap() {
-    const mine = new Mine(8, 8, 10);
-    mine.createMineMap();
-    this.mineMap = mine;
-    return mine.getMineMap().reduce((mineObj, value, position) => {
+    const { width, height, mine } = this.state;
+    const mineMap = new MineMap(width, height, mine);
+    mineMap.createMineMap();
+    this.mineMap = mineMap;
+    return mineMap.getMineMap().reduce((mineObj, value, position) => {
       const handleClick =
         value === -1 ? this.handleClickMine : this.handleBrickBroken;
       mineObj[position] = {
@@ -83,18 +86,33 @@ class App extends React.Component {
   }
 
   handleBrickBroken(position, e) {
-    let { mineMap, gameStatus } = this.state;
+    const {
+      mineMap,
+      gameStatus,
+      brokenCount,
+      minePosition,
+      flagPosition
+    } = this.state;
     const { value, isMarked, isBroken } = mineMap[position];
     if (isMarked || isBroken || gameStatus === "lost") {
       return;
     }
-    if (value === 0) {
-      mineMap = this.brickBrokenAround([position], mineMap);
-    }
-    mineMap[position] = { ...mineMap[position], isBroken: true };
-    this.setState({
-      mineMap
+    const waitingBroken = this.breakBrickAround([], position);
+    waitingBroken.forEach(wb => {
+      mineMap[wb] = { ...mineMap[wb], isBroken: true };
     });
+    const isFinishGame = this.isFinishGame(brokenCount + waitingBroken.length);
+    this.setState({
+      mineMap,
+      brokenCount: brokenCount + waitingBroken.length,
+      gameStatus: isFinishGame ? "winner" : gameStatus
+    });
+  }
+
+  isFinishGame(nextBrokenCount) {
+    const { brokenCount, mine, width, height } = this.state;
+    const totalBrick = width * height;
+    return nextBrokenCount + mine === totalBrick;
   }
 
   handleClickMine(position, e) {
@@ -127,45 +145,47 @@ class App extends React.Component {
     });
   }
 
-  pushWaitingBroken(waitingBroken, position, mineMap) {
+  canBeBorken(waitingBroken, position) {
+    const { mineMap } = this.state;
     if (
       !mineMap[position] ||
       (mineMap[position] && mineMap[position]["isBroken"]) ||
       (mineMap[position] && mineMap[position]["isMarked"]) ||
       waitingBroken.includes(position)
     ) {
-      return;
+      return false;
     }
-    waitingBroken.push(position);
+    return true;
   }
 
-  brickBrokenAround(waitingBroken, mineMap) {
-    const { width } = this.state;
-    if (waitingBroken.length === 0) {
-      return mineMap;
+  breakBrickAround(waitingBroken, position, forceBroken = false) {
+    const { width, mineMap } = this.state;
+
+    if (!this.canBeBorken(waitingBroken, position)) {
+      return waitingBroken;
     }
-    waitingBroken.forEach(b => {
-      if (mineMap[b]["value"] === 0 && !mineMap[b]["isBroken"]) {
-        const isLeftBoundary = b % width === 0;
-        const isRightBoundary = (b + 1) % width === 0;
-        if (!isLeftBoundary) {
-          this.pushWaitingBroken(waitingBroken, b - 1, mineMap);
-          this.pushWaitingBroken(waitingBroken, b - 1 + width, mineMap);
-          this.pushWaitingBroken(waitingBroken, b - 1 - width, mineMap);
-        }
-        if (!isRightBoundary) {
-          this.pushWaitingBroken(waitingBroken, b + 1, mineMap);
-          this.pushWaitingBroken(waitingBroken, b + 1 + width, mineMap);
-          this.pushWaitingBroken(waitingBroken, b + 1 - width, mineMap);
-        }
-        this.pushWaitingBroken(waitingBroken, b - width, mineMap);
-        this.pushWaitingBroken(waitingBroken, b + width, mineMap);
-      } else {
-        waitingBroken.splice(waitingBroken.indexOf(b), 1);
+    waitingBroken.push(position);
+
+    if (
+      (mineMap[position]["value"] === 0 && !mineMap[position]["isBroken"]) ||
+      forceBroken
+    ) {
+      const isLeftBoundary = position % width === 0;
+      const isRightBoundary = (position + 1) % width === 0;
+      if (!isLeftBoundary) {
+        this.breakBrickAround(waitingBroken, position - 1);
+        this.breakBrickAround(waitingBroken, position - 1 + width);
+        this.breakBrickAround(waitingBroken, position - 1 - width);
       }
-      mineMap[b] = { ...mineMap[b], isBroken: true };
-    });
-    return this.brickBrokenAround(waitingBroken, mineMap);
+      if (!isRightBoundary) {
+        this.breakBrickAround(waitingBroken, position + 1);
+        this.breakBrickAround(waitingBroken, position + 1 + width);
+        this.breakBrickAround(waitingBroken, position + 1 - width);
+      }
+      this.breakBrickAround(waitingBroken, position - width);
+      this.breakBrickAround(waitingBroken, position + width);
+    }
+    return waitingBroken;
   }
 
   handleAddFlag(position, e) {

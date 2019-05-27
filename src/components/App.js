@@ -34,6 +34,7 @@ class App extends React.Component {
     this.handleAddFlag = this.handleAddFlag.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.breakBrickAround = this.breakBrickAround.bind(this);
+    this.addFlags = this.addFlags.bind(this);
     this.mineMap;
   }
 
@@ -86,13 +87,7 @@ class App extends React.Component {
   }
 
   handleBrickBroken(position, e) {
-    const {
-      mineMap,
-      gameStatus,
-      brokenCount,
-      minePosition,
-      flagPosition
-    } = this.state;
+    const { mineMap, gameStatus, brokenCount, minePosition } = this.state;
     const { value, isMarked, isBroken } = mineMap[position];
     if (isMarked || isBroken || gameStatus === "lost") {
       return;
@@ -102,11 +97,18 @@ class App extends React.Component {
       mineMap[wb] = { ...mineMap[wb], isBroken: true };
     });
     const isFinishGame = this.isFinishGame(brokenCount + waitingBroken.length);
-    this.setState({
-      mineMap,
-      brokenCount: brokenCount + waitingBroken.length,
-      gameStatus: isFinishGame ? "winner" : gameStatus
-    });
+    this.setState(
+      {
+        mineMap,
+        brokenCount: brokenCount + waitingBroken.length,
+        gameStatus: isFinishGame ? "winner" : gameStatus
+      },
+      () => {
+        if (isFinishGame) {
+          this.addFlags(minePosition, mineMap);
+        }
+      }
+    );
   }
 
   isFinishGame(nextBrokenCount) {
@@ -188,13 +190,34 @@ class App extends React.Component {
     return waitingBroken;
   }
 
+  addFlags(positions, mineMap) {
+    const { minePosition } = this.state;
+    positions.forEach(position => {
+      mineMap[position] = { ...mineMap[position], isMarked: true };
+    });
+    const leftMineCount = minePosition.length - positions.length;
+    this.setState({
+      mineMap,
+      flagPosition: positions,
+      leftMine: {
+        one: leftMineCount % 10,
+        ten: ~~((leftMineCount / 10) % 10),
+        hundred: ~~((leftMineCount / 100) % 10)
+      }
+    });
+  }
+
   handleAddFlag(position, e) {
-    const { mineMap, flagPosition, minePosition } = this.state;
+    const { mineMap, flagPosition, minePosition, gameStatus } = this.state;
     const { isBroken, isMarked } = mineMap[position];
     e.preventDefault();
     const flagSize = flagPosition.length;
     const mineSize = minePosition.length;
-    if (isBroken || (mineSize === flagSize && !isMarked)) {
+    if (
+      isBroken ||
+      (mineSize === flagSize && !isMarked) ||
+      gameStatus === "winner"
+    ) {
       return;
     }
     mineMap[position] = { ...mineMap[position], isMarked: !isMarked };
@@ -203,17 +226,8 @@ class App extends React.Component {
     } else {
       flagPosition.splice(flagPosition.indexOf(position), 1);
     }
-    const leftMineCount = mineSize - flagPosition.length;
 
-    this.setState({
-      mineMap,
-      flagPosition,
-      leftMine: {
-        one: leftMineCount % 10,
-        ten: ~~((leftMineCount / 10) % 10),
-        hundred: ~~((leftMineCount / 100) % 10)
-      }
-    });
+    this.addFlags(flagPosition, mineMap);
   }
 
   handleReset() {

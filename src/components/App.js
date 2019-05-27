@@ -234,7 +234,7 @@ class App extends React.Component {
     if (
       isBroken ||
       (mineSize === flagSize && !isMarked) ||
-      gameStatus === "winner"
+      gameStatus !== "smile"
     ) {
       return;
     }

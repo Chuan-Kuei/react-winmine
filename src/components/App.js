@@ -1,7 +1,7 @@
 import React from "react";
 import * as R from "ramda";
 import Brick from "./Brick";
-import DigitalNumber from "./digitalNumber";
+import DigitalBoard from "./DigitalBoard";
 import "./app.css";
 import MineMap from "../businessLogic/MineMap";
 const defaultState = {
@@ -16,11 +16,7 @@ const defaultState = {
   minePosition: [],
   flagPosition: [],
   brokenCount: 0,
-  leftMine: {
-    one: 0,
-    ten: 1,
-    hundred: 0
-  },
+  leftMine: 10,
   timerTask: undefined
 };
 
@@ -213,15 +209,11 @@ class App extends React.Component {
     positions.forEach(position => {
       mineMap[position] = { ...mineMap[position], isMarked: true };
     });
-    const leftMineCount = minePosition.length - positions.length;
+    const leftMine = minePosition.length - positions.length;
     this.setState({
       mineMap,
-      flagPosition: positions,
-      leftMine: {
-        one: leftMineCount % 10,
-        ten: ~~((leftMineCount / 10) % 10),
-        hundred: ~~((leftMineCount / 100) % 10)
-      }
+      leftMine,
+      flagPosition: positions
     });
   }
 
@@ -265,25 +257,12 @@ class App extends React.Component {
   }
 
   render() {
-    const {
-      time,
-      hundreds,
-      tens,
-      ones,
-      mineMap,
-      gameStatus,
-      leftMine
-    } = this.state;
-    const { one: lone, ten: lten, hundred: lhundred } = leftMine;
+    const { time, mineMap, gameStatus, leftMine } = this.state;
     return (
       <div styleName="winmine-app-container">
-        <DigitalNumber value={lhundred} />
-        <DigitalNumber value={lten} />
-        <DigitalNumber value={lone} />
+        <DigitalBoard value={leftMine} />
         <Brick onClick={this.handleReset} status={gameStatus} />
-        <DigitalNumber value={hundreds} />
-        <DigitalNumber value={tens} />
-        <DigitalNumber value={ones} />
+        <DigitalBoard value={time} />
         <div>
           {mineMap &&
             Object.keys(mineMap).map((m, index) => {

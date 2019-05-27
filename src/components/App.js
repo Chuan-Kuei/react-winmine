@@ -39,10 +39,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // const timerTask = setInterval(this.timer, 1000);
+    const timerTask = setInterval(this.timer, 1000);
     const mineMap = this.getMineMap();
     this.setState({
-      // timerTask,
+      timerTask,
       mineMap,
       minePosition: this.mineMap.getMine()
     });
@@ -87,7 +87,13 @@ class App extends React.Component {
   }
 
   handleBrickBroken(position, e) {
-    const { mineMap, gameStatus, brokenCount, minePosition } = this.state;
+    const {
+      mineMap,
+      gameStatus,
+      brokenCount,
+      minePosition,
+      timerTask
+    } = this.state;
     const { value, isMarked, isBroken } = mineMap[position];
     if (isMarked || isBroken || gameStatus === "lost") {
       return;
@@ -97,11 +103,15 @@ class App extends React.Component {
       mineMap[wb] = { ...mineMap[wb], isBroken: true };
     });
     const isFinishGame = this.isFinishGame(brokenCount + waitingBroken.length);
+    if (isFinishGame) {
+      clearInterval(timerTask);
+    }
     this.setState(
       {
         mineMap,
         brokenCount: brokenCount + waitingBroken.length,
-        gameStatus: isFinishGame ? "winner" : gameStatus
+        gameStatus: isFinishGame ? "winner" : gameStatus,
+        timerTask: isFinishGame ? undefined : timerTask
       },
       () => {
         if (isFinishGame) {
@@ -118,7 +128,13 @@ class App extends React.Component {
   }
 
   handleClickMine(position, e) {
-    const { mineMap, minePosition, gameStatus, flagPosition } = this.state;
+    const {
+      mineMap,
+      minePosition,
+      gameStatus,
+      flagPosition,
+      timerTask
+    } = this.state;
     if (mineMap[position]["isMarked"]) {
       return;
     }
@@ -141,8 +157,10 @@ class App extends React.Component {
         isMarked: false
       };
     });
+    clearInterval(timerTask);
     this.setState({
       mineMap,
+      timerTask: undefined,
       gameStatus: "lost"
     });
   }
@@ -231,9 +249,15 @@ class App extends React.Component {
   }
 
   handleReset() {
+    let { timerTask } = this.state;
     const mineMap = this.getMineMap();
+    if (!timerTask) {
+      timerTask = setInterval(this.timer, 1000);
+    }
+
     this.setState({
       ...defaultState,
+      timerTask,
       mineMap,
       minePosition: this.mineMap.getMine(),
       flagPosition: []

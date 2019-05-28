@@ -2,15 +2,13 @@ import React from "react";
 import * as R from "ramda";
 import Brick from "./Brick";
 import DigitalBoard from "./DigitalBoard";
+import DigitalNumber from "./DigitalNumber";
 import "./app.css";
 import MineMap from "../businessLogic/MineMap";
 const defaultState = {
   time: 0,
-  hundreds: 0,
-  tens: 0,
-  ones: 0,
-  width: 8,
-  height: 8,
+  width: 9,
+  height: 9,
   mine: 10,
   gameStatus: "smile",
   minePosition: [],
@@ -263,7 +261,7 @@ class App extends React.Component {
         <DigitalBoard value={leftMine} />
         <Brick onClick={this.handleReset} status={gameStatus} />
         <DigitalBoard value={time} />
-        <div>
+        <div styleName="brickContainer">
           {mineMap &&
             Object.keys(mineMap).map((m, index) => {
               const {

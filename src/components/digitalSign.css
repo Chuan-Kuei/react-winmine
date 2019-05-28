@@ -1,27 +1,26 @@
 .container {
   border-style: solid;
-  border-width: 6px;
+  border-width: 3px;
   display: inline-block;
   border-color: transparent;
   position: absolute;
 }
 
 .vertical {
-  height: 10px;
+  height: 6px;
 }
 
 .horizontal {
-  width: 8px;
+  width: 6px;
 }
 
 .left-top {
   border-left-color: #600000;
   left: 0px;
   composes: vertical;
-}
-
-.left-top.active {
-  border-left-color: #ff0000;
+  &.active {
+    border-left-color: #ff0000;
+  }
 }
 
 .left-bottom {
@@ -29,30 +28,27 @@
   composes: vertical;
   left: 0px;
   bottom: 0px;
-}
-
-.left-bottom.active {
-  border-left-color: #ff0000;
+  &.active {
+    border-left-color: #ff0000;
+  }
 }
 
 .top {
   border-top-color: #600000;
   composes: horizontal;
   left: 1px;
-}
-
-.top.active {
-  border-top-color: #ff0000;
+  &.active {
+    border-top-color: #ff0000;
+  }
 }
 
 .right-top {
   border-right-color: #600000;
   composes: vertical;
   right: 0px;
-}
-
-.right-top.active {
-  border-right-color: #ff0000;
+  &.active {
+    border-right-color: #ff0000;
+  }
 }
 
 .right-bottom {
@@ -60,10 +56,9 @@
   composes: vertical;
   right: 0px;
   bottom: 0px;
-}
-
-.right-bottom.active {
-  border-right-color: #ff0000;
+  &.active {
+    border-right-color: #ff0000;
+  }
 }
 
 .bottom {
@@ -71,17 +66,16 @@
   composes: horizontal;
   left: 1px;
   bottom: 0px;
-}
-
-.bottom.active {
-  border-bottom-color: #ff0000;
+  &.active {
+    border-bottom-color: #ff0000;
+  }
 }
 
 .middle {
   top: 50%;
   transform: translateY(-50%);
   composes: horizontal;
-  left: -3px;
+  left: -1px;
 }
 
 .middle::before {
@@ -90,7 +84,7 @@
   border-top-color: #600000;
   border-style: solid;
   width: 100%;
-  border-width: 4px;
+  border-width: 2px;
   top: 0;
   position: absolute;
 }
@@ -105,7 +99,7 @@
   border-bottom-color: #600000;
   border-style: solid;
   width: 100%;
-  border-width: 4px;
+  border-width: 2px;
   position: absolute;
   bottom: 0;
 }

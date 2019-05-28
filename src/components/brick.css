@@ -21,36 +21,36 @@
   &.smile {
     background-image: url("../assets/smile.png");
     background-position: center;
-    background-size: contain;
-    width: 20px;
-    height: 20px;
+    background-size: 25px;
+    width: 23px;
+    height: 23px;
     &:active {
-      width: 24px;
-      height: 24px;
+      width: 27px;
+      height: 27px;
     }
   }
 
   &.lost {
     background-image: url("../assets/lost.png");
     background-position: center;
-    background-size: contain;
-    width: 20px;
-    height: 20px;
+    background-size: 25px;
+    width: 23px;
+    height: 23px;
     &:active {
-      width: 24px;
-      height: 24px;
+      width: 27px;
+      height: 27px;
     }
   }
 
   &.winner {
     background-image: url("../assets/win.png");
     background-position: center;
-    background-size: contain;
-    width: 20px;
-    height: 20px;
+    background-size: 25px;
+    width: 23px;
+    height: 23px;
     &:active {
-      width: 24px;
-      height: 24px;
+      width: 27px;
+      height: 27px;
     }
   }
 

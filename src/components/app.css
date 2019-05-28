@@ -1,5 +1,9 @@
 .winmine-app-container {
-  width: 170px;
-  height: 800px;
-  border: 1px solid black;
+  width: 210px;
+}
+
+.brickContainer {
+  display: flex;
+  width: 189px;
+  flex-wrap: wrap;
 }

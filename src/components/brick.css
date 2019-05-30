@@ -7,6 +7,8 @@
   height: 15px;
   display: inline-block;
   position: relative;
+  cursor: default;
+  user-select: none;
 
   &:active,
   &:focus,

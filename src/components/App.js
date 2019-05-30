@@ -258,9 +258,11 @@ class App extends React.Component {
     const { time, mineMap, gameStatus, leftMine } = this.state;
     return (
       <div styleName="winmine-app-container">
-        <DigitalBoard value={leftMine} />
-        <Brick onClick={this.handleReset} status={gameStatus} />
-        <DigitalBoard value={time} />
+        <div styleName="winmine-header">
+          <DigitalBoard value={leftMine} />
+          <Brick onClick={this.handleReset} status={gameStatus} />
+          <DigitalBoard value={time} />
+        </div>
         <div styleName="brickContainer">
           {mineMap &&
             Object.keys(mineMap).map((m, index) => {

@@ -75,7 +75,8 @@
   top: 50%;
   transform: translateY(-50%);
   composes: horizontal;
-  left: -1px;
+  left: -2px;
+  width: 8px;
 }
 
 .middle::before {

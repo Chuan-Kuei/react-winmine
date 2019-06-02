@@ -39,8 +39,7 @@ module.exports = {
           {
             loader: "file-loader",
             options: {
-              // publicPath: 'assets',
-              outputPath: "assets"
+              publicPath: "./assets"
             }
           }
         ]

@@ -1,0 +1,30 @@
+.winmine-app-container {
+  width: 200px;
+  padding: 5px;
+  border-color: #dfdfdf #808080 #808080 #dfdfdf;
+  border-style: solid;
+  border-width: medium;
+  background-color: #c0c0c0;
+}
+
+.brickContainer {
+  display: flex;
+  width: 189px;
+  flex-wrap: wrap;
+  border-color: #808080 #dfdfdf #dfdfdf #808080;
+  border-style: solid;
+  border-width: medium;
+  margin: auto;
+}
+
+.winmine-header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #c0c0c0;
+  border-color: #808080 #dfdfdf #dfdfdf #808080;
+  border-style: solid;
+  border-width: medium;
+  padding: 3px;
+  margin-bottom: 10px;
+  height: 28px;
+}

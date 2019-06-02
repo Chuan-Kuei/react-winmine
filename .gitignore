@@ -1,3 +1,5 @@
 dist
 node_modules
 .node-version
+docs/*
+!docs/.gitkeep

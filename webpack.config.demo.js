@@ -3,7 +3,7 @@ const common = require("./webpack.config.js");
 const override = {
   output: {
     path: __dirname + "/docs",
-    publicPath: "/",
+    publicPath: "./",
     filename: "bundle.js"
   }
 };

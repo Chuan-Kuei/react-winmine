@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App";
+import WinMine from "./components/WinMine";
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<WinMine />, document.getElementById("app"));
 
 if (module.hot) {
   module.hot.accept();

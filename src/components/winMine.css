@@ -1,5 +1,5 @@
 .winmine-app-container {
-  width: 200px;
+  width: fit-content;
   padding: 5px;
   border-color: #dfdfdf #808080 #808080 #dfdfdf;
   border-style: solid;
@@ -9,12 +9,21 @@
 
 .brickContainer {
   display: flex;
-  width: 189px;
   flex-wrap: wrap;
   border-color: #808080 #dfdfdf #dfdfdf #808080;
   border-style: solid;
   border-width: medium;
   margin: auto;
+
+  &.easy {
+    width: 189px;
+  }
+  &.medium {
+    width: 336px;
+  }
+  &.hard {
+    width: 631px;
+  }
 }
 
 .winmine-header {

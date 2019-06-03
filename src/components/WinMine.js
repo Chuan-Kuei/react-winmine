@@ -1,10 +1,30 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as R from "ramda";
+
 import Brick from "./Brick";
+import Const from "./Const";
 import DigitalBoard from "./DigitalBoard";
 import DigitalNumber from "./DigitalNumber";
-import "./app.css";
 import MineMap from "../businessLogic/MineMap";
+import "./winMine.css";
+const LEVEL_MAP = {
+  [Const.EASY]: {
+    width: 9,
+    height: 9,
+    mine: 10
+  },
+  [Const.MEDIUM]: {
+    width: 16,
+    height: 16,
+    mine: 40
+  },
+  [Const.HARD]: {
+    width: 30,
+    height: 16,
+    mine: 99
+  }
+};
 const defaultState = {
   time: 0,
   width: 9,
@@ -18,10 +38,18 @@ const defaultState = {
   timerTask: undefined
 };
 
-class App extends React.Component {
+class WinMine extends React.Component {
   constructor(props) {
     super(props);
-    this.state = defaultState;
+    const { level } = props;
+    const { width, height, mine } = LEVEL_MAP[level];
+    this.state = {
+      ...defaultState,
+      width,
+      height,
+      mine,
+      leftMine: mine
+    };
     this.timer = this.timer.bind(this);
     this.handleBrickBroken = this.handleBrickBroken.bind(this);
     this.handleClickMine = this.handleClickMine.bind(this);
@@ -239,7 +267,7 @@ class App extends React.Component {
   }
 
   handleReset() {
-    let { timerTask } = this.state;
+    let { timerTask, leftMine, width, height, mine } = this.state;
     const mineMap = this.getMineMap();
     if (!timerTask) {
       timerTask = setInterval(this.timer, 1000);
@@ -249,12 +277,17 @@ class App extends React.Component {
       ...defaultState,
       timerTask,
       mineMap,
+      leftMine,
+      width,
+      height,
+      mine,
       minePosition: this.mineMap.getMine(),
       flagPosition: []
     });
   }
 
   render() {
+    const { level } = this.props;
     const { time, mineMap, gameStatus, leftMine } = this.state;
     return (
       <div styleName="winmine-app-container">
@@ -263,7 +296,7 @@ class App extends React.Component {
           <Brick onClick={this.handleReset} status={gameStatus} />
           <DigitalBoard value={time} />
         </div>
-        <div styleName="brickContainer">
+        <div styleName={`brickContainer ${level}`}>
           {mineMap &&
             Object.keys(mineMap).map((m, index) => {
               const {
@@ -291,4 +324,13 @@ class App extends React.Component {
     );
   }
 }
-export default App;
+
+WinMine.defaultProps = {
+  level: Const.EASY
+};
+
+WinMine.propTypes = {
+  level: PropTypes.oneOf([Const.EASY, Const.MEDIUM, Const.HARD])
+};
+
+export default WinMine;

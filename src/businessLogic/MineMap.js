@@ -1,68 +1,78 @@
-function MineMap(width, height, maxMine) {
-  this.width = width;
-  this.height = height;
-  this.maxMine = maxMine;
-  this.mineMap = {};
-  this.mine = [];
-}
-
-MineMap.prototype.getMineMap = function() {
-  return this.mineMap;
-};
-
-MineMap.prototype.getMine = function() {
-  return this.mine;
-};
-
-MineMap.prototype.createMine = function() {
+const createMine = (width, height, maxMine) => {
   const mine = {};
-  const mapSize = this.width * this.height;
-  while (Object.keys(mine).length < this.maxMine) {
+  const mapSize = width * height;
+  while (Object.keys(mine).length < maxMine) {
     let randomNum = ~~(Math.random() * mapSize);
     mine[randomNum] = 0;
   }
-  this.mine = Object.keys(mine).map(k => +k);
+  return Object.keys(mine).map(k => +k);
 };
 
-MineMap.prototype.createTips = function() {
-  const mineMap = this.mineMap;
-  const width = this.width;
-  this.mine.forEach(mine => {
-    const isLeftBoundary = mine % width === 0;
-    const isRightBoundary = (mine + 1) % width === 0;
-    mineMap[mine] = -1;
-    this.createTip(mine - width);
-    this.createTip(mine + width);
-    if (!isLeftBoundary) {
-      this.createTip(mine - width - 1);
-      this.createTip(mine - 1);
-      this.createTip(mine + width - 1);
-    }
-    if (!isRightBoundary) {
-      this.createTip(mine - width + 1);
-      this.createTip(mine + 1);
-      this.createTip(mine + width + 1);
-    }
-  });
-  this.mineMap = mineMap;
+const isOutofMap = (maxPosition, position) => {
+  return position >= maxPosition || position < 0;
 };
 
-MineMap.prototype.createTip = function(position) {
-  const mineMap = this.mineMap;
-  if (mineMap[position] !== undefined && mineMap[position] !== -1) {
-    mineMap[position]++;
+const validateBoundary = (minePosition, width) => {
+  const isLeftBoundary = minePosition % width === 0;
+  const isRightBoundary = (minePosition + 1) % width === 0;
+  const leftLimit = ["left", "leftTop", "leftBottom"];
+  const rightLimit = ["right", "rightTop", "rightBottom"];
+  return position => {
+    return (
+      (isLeftBoundary && leftLimit.includes(position)) ||
+      (isRightBoundary && rightLimit.includes(position))
+    );
+  };
+};
+
+const createTips = (mineMap, minePositionList, width) => {
+  return minePositionList.reduce((result, minePosition) => {
+    const isLeftBoundary = minePosition % width === 0;
+    const isRightBoundary = (minePosition + 1) % width === 0;
+    const maxPosition = mineMap.length;
+    const isCloseBoundary = validateBoundary(minePosition, width);
+    result[minePosition] = -1;
+    const tipPositionList = {
+      top: minePosition - width,
+      bottom: minePosition + width,
+      leftTop: minePosition - width - 1,
+      left: minePosition - 1,
+      leftBottom: minePosition + width - 1,
+      rightTop: minePosition - width + 1,
+      right: minePosition + 1,
+      rightBottom: minePosition + width + 1
+    };
+
+    Object.keys(tipPositionList)
+      .filter(p => !isOutofMap(maxPosition, tipPositionList[p]))
+      .filter(p => !isCloseBoundary(p))
+      .forEach(p => {
+        const tipPosition = tipPositionList[p];
+        result[tipPosition] = createTip(result[tipPosition]);
+      });
+    return result;
+  }, mineMap);
+};
+
+const createTip = mapValue => {
+  if (mapValue !== undefined && mapValue !== -1) {
+    return mapValue + 1;
   }
+  return mapValue;
+};
+const initMineMap = (width, height) => {
+  const mapSize = width * height;
+  return Array(mapSize).fill(0);
 };
 
-MineMap.prototype.initMineMap = function() {
-  const mapSize = this.width * this.height;
-  this.mineMap = Array(mapSize).fill(0);
+const createMineMap = (width, height, maxMine) => {
+  const emptyMineMap = initMineMap(width, height);
+  const minePosition = createMine(width, height, maxMine);
+  const mineMap = createTips(emptyMineMap, minePosition, width);
+  return {
+    mineMap,
+    minePosition
+  };
 };
 
-MineMap.prototype.createMineMap = function() {
-  this.initMineMap();
-  this.createMine();
-  this.createTips();
-};
-
-module.exports = MineMap;
+export default createMineMap;

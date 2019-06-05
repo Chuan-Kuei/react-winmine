@@ -6,7 +6,7 @@ import Brick from "./Brick";
 import Const from "./Const";
 import DigitalBoard from "./DigitalBoard";
 import DigitalNumber from "./DigitalNumber";
-import MineMap from "../businessLogic/MineMap";
+import createMineMap from "../businessLogic/MineMap";
 import "./winMine.css";
 const LEVEL_MAP = {
   [Const.EASY]: {
@@ -57,16 +57,16 @@ class WinMine extends React.Component {
     this.handleReset = this.handleReset.bind(this);
     this.breakBrickAround = this.breakBrickAround.bind(this);
     this.addFlags = this.addFlags.bind(this);
-    this.mineMap;
   }
 
   componentDidMount() {
+    const { width, height, mine } = this.state;
+    const { mineMap, minePosition } = createMineMap(width, height, mine);
     const timerTask = setInterval(this.timer, 1000);
-    const mineMap = this.getMineMap();
     this.setState({
       timerTask,
-      mineMap,
-      minePosition: this.mineMap.getMine()
+      minePosition,
+      mineMap: this.setMineMapAction(mineMap)
     });
   }
 
@@ -88,12 +88,8 @@ class WinMine extends React.Component {
     });
   }
 
-  getMineMap() {
-    const { width, height, mine } = this.state;
-    const mineMap = new MineMap(width, height, mine);
-    mineMap.createMineMap();
-    this.mineMap = mineMap;
-    return mineMap.getMineMap().reduce((mineObj, value, position) => {
+  setMineMapAction(mineMap) {
+    return mineMap.reduce((mineObj, value, position) => {
       const handleClick =
         value === -1 ? this.handleClickMine : this.handleBrickBroken;
       mineObj[position] = {
@@ -268,7 +264,8 @@ class WinMine extends React.Component {
 
   handleReset() {
     let { timerTask, leftMine, width, height, mine } = this.state;
-    const mineMap = this.getMineMap();
+    const { mineMap, minePosition } = createMineMap(width, height, mine);
+
     if (!timerTask) {
       timerTask = setInterval(this.timer, 1000);
     }
@@ -276,12 +273,12 @@ class WinMine extends React.Component {
     this.setState({
       ...defaultState,
       timerTask,
-      mineMap,
+      mineMap: this.setMineMapAction(mineMap),
       leftMine,
       width,
       height,
       mine,
-      minePosition: this.mineMap.getMine(),
+      minePosition,
       flagPosition: []
     });
   }

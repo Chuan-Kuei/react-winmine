@@ -240,9 +240,9 @@ class WinMine extends React.Component {
   }
 
   handleAddFlag(position, e) {
+    e.preventDefault();
     const { mineMap, flagPosition, minePosition, gameStatus } = this.state;
     const { isBroken, isMarked } = mineMap[position];
-    e.preventDefault();
     const flagSize = flagPosition.length;
     const mineSize = minePosition.length;
     if (

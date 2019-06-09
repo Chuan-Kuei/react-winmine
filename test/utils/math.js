@@ -2,6 +2,9 @@ const nativeMath = global.Math;
 
 const setupMock = () => {
   const mockMath = Object.create(global.Math);
+  mockMath.clearFakeRandom = () => {
+    mockMath.fakeRandom = [];
+  };
   mockMath.random = () => {
     const fakeRandom = mockMath.fakeRandom;
     const isArrayData = fakeRandom && fakeRandom instanceof Array;
@@ -13,11 +16,11 @@ const setupMock = () => {
   global.Math = mockMath;
 };
 
-const clearMock = () => {
+const resetMath = () => {
   global.Math = nativeMath;
 };
 
 module.exports = {
   setupMock,
-  clearMock
+  resetMath
 };

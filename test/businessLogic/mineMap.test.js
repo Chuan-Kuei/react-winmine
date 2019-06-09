@@ -1,38 +1,25 @@
-import createMineMap from "./MineMap";
-const nativeMath = global.Math;
-
-const setupMockData = () => {
-  const mockMath = Object.create(global.Math);
-  mockMath.random = () => {
-    const fakeRandom = mockMath.fakeRandom;
-    const isArrayData = fakeRandom && fakeRandom instanceof Array;
-    if (!isArrayData || fakeRandom.length === 0) {
-      return nativeMath.random();
-    }
-    return fakeRandom.pop();
-  };
-  global.Math = mockMath;
-};
-
-const clearSetup = () => {
-  global.Math = nativeMath;
-};
+import createMineMap from "../../src/businessLogic/MineMap";
+import math from "../utils/math";
 
 describe("Create MineMap 9*9 and mine 9 ", () => {
+  // Given
+  const width = 9;
+  const height = 9;
+  const mapSize = width * height;
+  const mine = 9;
+
+  // When
+  const { mineMap, minePosition } = createMineMap(width, height, mine);
+
   beforeAll(() => {
-    setupMockData();
+    math.setupMock();
+  });
+
+  afterAll(() => {
+    math.clearMock();
   });
 
   test("create correct map", () => {
-    // Given
-    const width = 9;
-    const height = 9;
-    const mapSize = width * height;
-    const mine = 9;
-
-    // When
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
-
     // Then
     expect(mineMap).toHaveLength(width * height);
     expect(minePosition).toHaveLength(mine);
@@ -40,10 +27,6 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
 
   test("mine position 0~9 , and tips correct", () => {
     // Given
-    const width = 9;
-    const height = 9;
-    const mapSize = width * height;
-    const mine = 9;
     const expectMinePosition = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     Math.fakeRandom = expectMinePosition.map(p => {
       return p / mapSize;
@@ -66,9 +49,5 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
     for (let i = 18; i < mapSize; i++) {
       expect(mineMap[i]).toEqual(0);
     }
-  });
-
-  afterAll(() => {
-    clearSetup();
   });
 });

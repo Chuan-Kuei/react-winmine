@@ -6,7 +6,7 @@ import Brick from "./Brick";
 import Const from "./Const";
 import DigitalBoard from "./DigitalBoard";
 import DigitalNumber from "./DigitalNumber";
-import createMineMap from "../businessLogic/MineMap";
+import createMineMap from "../businessLogic/mineMap";
 import "./winMine.css";
 const LEVEL_MAP = {
   [Const.EASY]: {

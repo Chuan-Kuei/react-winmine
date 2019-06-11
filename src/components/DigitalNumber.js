@@ -29,9 +29,9 @@ const DigitalNumber = ({ value }) => {
   return (
     <div styleName="container">
       {DIGITAL_POSITION.map((position, index) => {
-        const isActive = ~~numberSign[index] ? "active" : "";
+        const isActive = !!+numberSign[index];
         return (
-          <DigitalSign key={position} position={`${position} ${isActive}`} />
+          <DigitalSign key={position} position={position} active={isActive} />
         );
       })}
     </div>

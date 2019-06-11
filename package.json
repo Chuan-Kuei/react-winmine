@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build-demo": "cp ./src/index.html ./docs && webpack --config ./webpack.config.demo.js --mode production",
-    "test": "jest --coverage"
+    "test": "NODE_ENV=test jest --coverage"
   },
   "keywords": [
     "winmine"
@@ -47,7 +47,7 @@
     ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
+      "\\.css$": "identity-obj-proxy"
     },
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"

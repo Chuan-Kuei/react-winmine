@@ -3,12 +3,18 @@ import PropTypes from "prop-types";
 
 import "./digitalSign.css";
 
-const DigitalSign = ({ position }) => {
-  return <div styleName={`container ${position}`} />;
+const DigitalSign = ({ position, active }) => {
+  const isActive = active ? "active" : "";
+  return <div styleName={`container ${position} ${isActive}`} />;
+};
+
+DigitalSign.defaultProps = {
+  active: false
 };
 
 DigitalSign.propTypes = {
-  position: PropTypes.string.isRequired
+  position: PropTypes.string.isRequired,
+  active: PropTypes.bool
 };
 
 export default DigitalSign;

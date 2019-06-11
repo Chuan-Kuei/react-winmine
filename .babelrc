@@ -1,4 +1,16 @@
 {
   "presets": ["@babel/preset-env", "@babel/preset-react"],
-  "plugins": [["react-css-modules", { "webpackHotModuleReloading": true }]]
+  "plugins": [["react-css-modules", { "webpackHotModuleReloading": true }]],
+  "env": {
+    "test": {
+      "plugins": [
+        [
+          "babel-plugin-react-css-modules",
+          {
+            "generateScopedName": "[local]"
+          }
+        ]
+      ]
+    }
+  }
 }

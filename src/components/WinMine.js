@@ -274,7 +274,7 @@ class WinMine extends React.Component {
       ...defaultState,
       timerTask,
       mineMap: this.setMineMapAction(mineMap),
-      leftMine,
+      leftMine: mine,
       width,
       height,
       mine,

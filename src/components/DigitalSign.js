@@ -3,13 +3,12 @@ import PropTypes from "prop-types";
 
 import "./digitalSign.css";
 
-const DigitalSign = ({ position, className }) => {
-  return <div className={className} styleName={`container ${position}`} />;
+const DigitalSign = ({ position }) => {
+  return <div styleName={`container ${position}`} />;
 };
 
 DigitalSign.propTypes = {
-  position: PropTypes.string.isRequired,
-  className: PropTypes.string
+  position: PropTypes.string.isRequired
 };
 
 export default DigitalSign;

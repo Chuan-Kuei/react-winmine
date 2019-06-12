@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DigitalNumber render correctly 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="container left-top vertical active"
+  />
+  <div
+    className="container top horizontal active"
+  />
+  <div
+    className="container right-top vertical active"
+  />
+  <div
+    className="container right-bottom vertical active"
+  />
+  <div
+    className="container bottom horizontal active"
+  />
+  <div
+    className="container left-bottom vertical active"
+  />
+  <div
+    className="container middle horizontal"
+  />
+</div>
+`;

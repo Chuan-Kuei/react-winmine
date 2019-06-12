@@ -4,7 +4,7 @@ import renderer from "react-test-renderer";
 
 import DigitalSign from "../../src/components/DigitalSign";
 
-describe.only("DigitalSign", () => {
+describe("DigitalSign", () => {
   test("render correctly", () => {
     const wrapper = renderer
       .create(<DigitalSign position="left-top" />)

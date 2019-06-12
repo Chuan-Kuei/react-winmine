@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build-demo": "cp ./src/index.html ./docs && webpack --config ./webpack.config.demo.js --mode production",
-    "test": "NODE_ENV=test jest --coverage"
+    "test": "jest --coverage"
   },
   "keywords": [
     "winmine"

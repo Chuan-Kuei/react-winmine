@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import DigitalSign from "./DigitalSign.js";
 import "./digitalNumber.css";
 const DIGITAL = {
@@ -37,4 +39,13 @@ const DigitalNumber = ({ value }) => {
     </div>
   );
 };
+
+DigitalNumber.defaultProps = {
+  value: 0
+};
+
+DigitalNumber.propTypes = {
+  value: PropTypes.number
+};
+
 export default DigitalNumber;

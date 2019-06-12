@@ -1,0 +1,45 @@
+.container {
+  background-color: #c0c0c0;
+  border-color: #dfdfdf #808080 #808080 #dfdfdf;
+  border-style: solid;
+  border-width: medium;
+  width: 23px;
+  height: 23px;
+  display: inline-block;
+  position: relative;
+  cursor: default;
+  user-select: none;
+  background-position: center;
+  background-size: 25px;
+
+  &:active {
+    border-color: #858585;
+    border-width: thin;
+    width: 19px;
+    height: 19px;
+  }
+
+  &.smile {
+    background-image: url("../assets/smile.png");
+    &:active {
+      width: 27px;
+      height: 27px;
+    }
+  }
+
+  &.lost {
+    background-image: url("../assets/lost.png");
+    &:active {
+      width: 27px;
+      height: 27px;
+    }
+  }
+
+  &.winner {
+    background-image: url("../assets/win.png");
+    &:active {
+      width: 27px;
+      height: 27px;
+    }
+  }
+}

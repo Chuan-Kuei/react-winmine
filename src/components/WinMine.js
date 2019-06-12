@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 import Brick from "./Brick";
+import StatusBrick from "./StatusBrick";
+
 import Const from "./Const";
 import DigitalBoard from "./DigitalBoard";
 import DigitalNumber from "./DigitalNumber";
@@ -95,7 +97,7 @@ class WinMine extends React.Component {
       mineObj[position] = {
         isBroken: false,
         isMarked: false,
-        hit: false,
+        wrong: false,
         value,
         handleClick: R.curry(handleClick)(position),
         handleAddFlag: R.curry(this.handleAddFlag)(position)
@@ -165,7 +167,7 @@ class WinMine extends React.Component {
         mineMap[m] = { ...mineMap[m], isBroken: true };
       }
     });
-    mineMap[position] = { ...mineMap[position], isBroken: true, hit: true };
+    mineMap[position] = { ...mineMap[position], isBroken: true, wrong: true };
     const failFlags = R.without(minePosition, flagPosition);
     failFlags.forEach(failPosition => {
       mineMap[failPosition] = {
@@ -290,7 +292,7 @@ class WinMine extends React.Component {
       <div styleName="winmine-app-container">
         <div styleName="winmine-header">
           <DigitalBoard value={leftMine} />
-          <Brick onClick={this.handleReset} status={gameStatus} />
+          <StatusBrick onClick={this.handleReset} status={gameStatus} />
           <DigitalBoard value={time} />
         </div>
         <div styleName={`brickContainer ${level}`}>
@@ -301,7 +303,7 @@ class WinMine extends React.Component {
                 isBroken,
                 isMarked,
                 handleClick,
-                hit,
+                wrong,
                 handleAddFlag
               } = mineMap[m];
               return (
@@ -311,7 +313,7 @@ class WinMine extends React.Component {
                   broken={isBroken}
                   marked={isMarked}
                   onClick={handleClick}
-                  hit={hit}
+                  wrong={wrong}
                   onContextMenu={handleAddFlag}
                 />
               );

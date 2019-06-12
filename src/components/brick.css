@@ -20,42 +20,6 @@
     height: 19px;
   }
 
-  &.smile {
-    background-image: url("../assets/smile.png");
-    background-position: center;
-    background-size: 25px;
-    width: 23px;
-    height: 23px;
-    &:active {
-      width: 27px;
-      height: 27px;
-    }
-  }
-
-  &.lost {
-    background-image: url("../assets/lost.png");
-    background-position: center;
-    background-size: 25px;
-    width: 23px;
-    height: 23px;
-    &:active {
-      width: 27px;
-      height: 27px;
-    }
-  }
-
-  &.winner {
-    background-image: url("../assets/win.png");
-    background-position: center;
-    background-size: 25px;
-    width: 23px;
-    height: 23px;
-    &:active {
-      width: 27px;
-      height: 27px;
-    }
-  }
-
   &.flag {
     background-image: url("../assets/flag.png");
     background-position: center;
@@ -75,7 +39,7 @@
       background-image: url("../assets/mine.png");
       background-position: center;
       background-size: contain;
-      &.hit {
+      &.wrong {
         background-color: red;
       }
     }

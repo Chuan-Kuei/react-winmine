@@ -19,8 +19,7 @@ const VALUE_STYLE_MAP = {
 const Brick = ({
   broken,
   marked,
-  hit,
-  status,
+  wrong,
   onClick: handleBrickBroken,
   onContextMenu: handleAddFlag,
   value
@@ -35,11 +34,8 @@ const Brick = ({
   if (marked) {
     styles.push("flag");
   }
-  if (hit) {
-    styles.push("hit");
-  }
-  if (status) {
-    styles.push(status);
+  if (wrong) {
+    styles.push("wrong");
   }
 
   const styleName = styles.join(" ");
@@ -57,15 +53,13 @@ const Brick = ({
 Brick.defaultProps = {
   broken: false,
   marked: false,
-  hit: false,
-  status: ""
+  wrong: false
 };
 
 Brick.propTypes = {
   broken: PropTypes.bool,
   marked: PropTypes.bool,
-  hit: PropTypes.bool,
-  status: PropTypes.oneOf(["smile", "winner", "lost", "reset", ""]),
+  wrong: PropTypes.bool,
   onClick: PropTypes.func,
   onContextMenu: PropTypes.func,
   value: PropTypes.number

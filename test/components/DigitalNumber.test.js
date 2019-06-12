@@ -151,10 +151,10 @@ describe("DigitalNumber", () => {
   });
 
   const assertDigitalSign = (wrapper, expectResults) => {
-    expect(wrapper.find("DigitalSign")).toHaveLength(7);
+    const digitalSigns = wrapper.find("DigitalSign");
+    expect(digitalSigns).toHaveLength(7);
     expectResults.forEach((expectResult, index) => {
-      const DigitalSign = wrapper.find("DigitalSign");
-      expect(DigitalSign.at(index).props()).toEqual(expectResult);
+      expect(digitalSigns.at(index).props()).toEqual(expectResult);
     });
   };
 });

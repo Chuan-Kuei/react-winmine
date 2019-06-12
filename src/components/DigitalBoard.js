@@ -5,15 +5,16 @@ import DigitalNumber from "./DigitalNumber";
 import "./digitalBoard.css";
 
 const DigitalBoard = ({ value }) => {
-  const one = value % 10;
-  const ten = ~~((value / 10) % 10);
-  const hundred = ~~((value / 100) % 10);
+  const absValue = Math.abs(value);
+  const units = absValue % 10;
+  const tens = ~~((absValue / 10) % 10);
+  const hundreds = ~~((absValue / 100) % 10);
 
   return (
     <div styleName="container">
-      <DigitalNumber value={hundred} />
-      <DigitalNumber value={ten} />
-      <DigitalNumber value={one} />
+      <DigitalNumber value={hundreds} />
+      <DigitalNumber value={tens} />
+      <DigitalNumber value={units} />
     </div>
   );
 };

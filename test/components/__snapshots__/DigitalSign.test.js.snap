@@ -2,6 +2,6 @@
 
 exports[`DigitalSign render correctly 1`] = `
 <div
-  className="container left-top vertical active"
+  className="container left-top vertical"
 />
 `;

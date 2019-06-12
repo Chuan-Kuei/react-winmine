@@ -13,7 +13,15 @@ DigitalSign.defaultProps = {
 };
 
 DigitalSign.propTypes = {
-  position: PropTypes.string.isRequired,
+  position: PropTypes.oneOf([
+    "left-top",
+    "top",
+    "right-top",
+    "right-bottom",
+    "bottom",
+    "left-bottom",
+    "middle"
+  ]).isRequired,
   active: PropTypes.bool
 };
 

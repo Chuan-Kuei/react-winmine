@@ -34,16 +34,15 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpe?g|gif)$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              // publicPath: 'assets',
-              outputPath: "assets"
-            }
+        test: /\.(woff|woff2|eot|ttf|otf|png|svg|jpg|gif)$/,
+        use: {
+          loader: "url-loader",
+          options: {
+            limit: 1000, //bytes
+            name: "[hash:7].[ext]",
+            outputPath: "assets"
           }
-        ]
+        }
       }
     ]
   },

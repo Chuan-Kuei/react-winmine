@@ -1,11 +1,11 @@
 {
-  "name": "react-winmine",
+  "name": "react-winmine-demo",
   "version": "1.0.0",
   "description": "winmine of react",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
-    "build-demo": "cp ./src/index.html ./ && webpack --config ./webpack.config.demo.js --mode production",
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,7 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "react": "^15.6.2",
-    "react-dom": "^15.6.2"
+    "react-dom": "^15.6.2",
+    "react-winmine": "git://github.com/Chuan-Kuei/react-winmine.git"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

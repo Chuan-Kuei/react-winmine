@@ -2,6 +2,30 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/index.js",
+  output: {
+    path: __dirname + "/lib",
+    filename: "react-winmine.min.js",
+    library: "ReactWinmine.js",
+    libraryTarget: "umd"
+  },
+  externals: [
+    {
+      react: {
+        root: "React",
+        commonjs2: "react",
+        amd: "react",
+        commonjs: "react"
+      }
+    },
+    {
+      "react-dom": {
+        root: "ReactDOM",
+        commonjs2: "react-dom",
+        commonjs: "react-dom",
+        amd: "react-dom"
+      }
+    }
+  ],
   module: {
     rules: [
       {
@@ -45,19 +69,5 @@ module.exports = {
         }
       }
     ]
-  },
-  resolve: {
-    extensions: ["*", ".js", ".jsx"]
-  },
-  output: {
-    path: __dirname + "/dist",
-    publicPath: "/",
-    filename: "bundle.js"
-  },
-  plugins: [new webpack.HotModuleReplacementPlugin()],
-  devServer: {
-    contentBase: "./dist",
-    hot: true
-  },
-  devtool: "source-map"
+  }
 };

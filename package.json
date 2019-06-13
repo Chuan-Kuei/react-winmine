@@ -2,14 +2,15 @@
   "name": "react-winmine",
   "version": "1.0.0",
   "description": "winmine of react",
-  "main": "index.js",
+  "main": "lib/react-winmine.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/Chuan-Kuei/react-winmine.git"
   },
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
-    "build-demo": "cp ./src/index.html ./docs && webpack --config ./webpack.config.demo.js --mode production",
+    "start": "webpack-dev-server --config ./webpack.dev.js --mode development",
+    "build-demo": "cp ./src/index.html ./docs && webpack --config ./webpack.demo.js --mode production",
+    "build-lib": "webpack --config ./webpack.umd.js --mode production",
     "test": "jest --coverage"
   },
   "keywords": [

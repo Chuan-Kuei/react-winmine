@@ -72,6 +72,18 @@ class WinMine extends React.Component {
     });
   }
 
+  componentDidUpdate({ level: prevLevel }) {
+    const { level } = this.props;
+    if (level !== prevLevel) {
+      const { width, height, mine } = LEVEL_MAP[level];
+      const { mineMap, minePosition } = createMineMap(width, height, mine);
+      this.setState({
+        minePosition,
+        mineMap: this.setMineMapAction(mineMap)
+      });
+    }
+  }
+
   componentWillUnmount() {
     const { timerTask } = this.state;
     if (timerTask) {

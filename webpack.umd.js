@@ -59,7 +59,15 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              plugins: ["@babel/transform-react-jsx", "react-css-modules"]
+              plugins: [
+                "@babel/transform-react-jsx",
+                [
+                  "react-css-modules",
+                  {
+                    generateScopedName: "[name]_[local]"
+                  }
+                ]
+              ]
             }
           }
         ]

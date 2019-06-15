@@ -88,7 +88,7 @@ class WinMine extends React.Component {
         width,
         height,
         mine,
-        leftMine,
+        leftMine: mine,
         timerTask
       });
     }

@@ -13,7 +13,11 @@
     "test": "jest --coverage"
   },
   "keywords": [
-    "winmine"
+    "winmine",
+    "react",
+    "react-winmine",
+    "minesweeper",
+    "react-component"
   ],
   "author": "Jimmy Su",
   "license": "MIT",

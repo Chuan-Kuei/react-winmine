@@ -7,7 +7,7 @@ Classic windows minesweeper game for React.
 ## Installation and usage
 
 ```
-npm install git://github.com/Chuan-Kuei/react-winmine.git
+npm install react-winmine
 ```
 
 And then

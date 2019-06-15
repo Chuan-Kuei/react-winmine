@@ -1,5 +1,6 @@
 import React from "react";
 import WinMine from "react-winmine";
+import "react-winmine/lib/react-winmine.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,10 +23,9 @@ class App extends React.Component {
     return (
       <div
         style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%,-50%)"
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
         }}
       >
         <select value={level} onChange={this.handleChangeLevel}>

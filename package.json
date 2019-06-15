@@ -10,7 +10,7 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.dev.js --mode development",
     "build-lib": "webpack --config ./webpack.umd.js --mode production",
-    "test": "jest --coverage"
+    "test": "jest"
   },
   "keywords": [
     "winmine",
@@ -60,6 +60,8 @@
     },
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
-    ]
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }

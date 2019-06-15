@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.js",
@@ -26,23 +27,29 @@ module.exports = {
       }
     }
   ],
+  plugins: [
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "react-winmine.css",
+      chunkFilename: "[id].css"
+    })
+  ],
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.(sa|sc|c)ss$/,
         use: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
               importLoaders: 1,
               modules: true,
-              localIdentName: "[name]"
+              localIdentName: "[name]_[local]"
             }
           },
-          {
-            loader: "postcss-loader"
-          }
+          "postcss-loader"
         ]
       },
       {

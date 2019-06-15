@@ -32,6 +32,9 @@ const defaultState = {
   width: 9,
   height: 9,
   mine: 10,
+  hundreds: 0,
+  tens: 0,
+  ones: 0,
   gameStatus: "smile",
   minePosition: [],
   flagPosition: [],
@@ -75,11 +78,17 @@ class WinMine extends React.Component {
   componentDidUpdate({ level: prevLevel }) {
     const { level } = this.props;
     if (level !== prevLevel) {
+      const { timerTask } = this.state;
       const { width, height, mine } = LEVEL_MAP[level];
       const { mineMap, minePosition } = createMineMap(width, height, mine);
       this.setState({
+        ...defaultState,
         minePosition,
-        mineMap: this.setMineMapAction(mineMap)
+        mineMap: this.setMineMapAction(mineMap),
+        width,
+        height,
+        mine,
+        timerTask
       });
     }
   }

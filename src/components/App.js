@@ -10,7 +10,8 @@ class App extends React.Component {
     this.handleChangeLevel = this.handleChangeLevel.bind(this);
   }
 
-  handleChangeLevel(level) {
+  handleChangeLevel(e) {
+    const { value: level } = e.target;
     this.setState({
       level
     });

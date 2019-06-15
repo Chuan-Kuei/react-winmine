@@ -29,9 +29,9 @@ render() {
 
 ## Props
 
-| Name  |   Type   | Default | Description                                                              |
-| :---: | :------: | :-----: | :----------------------------------------------------------------------- |
-| level | {String} |  easy   | easy: 9x9, mine: 10<br>medium:16x16, mine:40<br>hard: 30x16, mine:99<br> |
+| Name  |  Type  | Default | Description                                                              |
+| :---: | :----: | :-----: | :----------------------------------------------------------------------- |
+| level | String |  easy   | easy: 9x9, mine: 10<br>medium:16x16, mine:40<br>hard: 30x16, mine:99<br> |
 
 ## License
 

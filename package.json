@@ -15,7 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "react": "^15.6.2",
-    "react-dom": "^15.6.2"
+    "react-dom": "^15.6.2",
+    "react-winmine": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -31,7 +32,6 @@
     "postcss-loader": "^3.0.0",
     "postcss-nested": "^4.1.2",
     "ramda": "^0.26.1",
-    "react-winmine": "git://github.com/Chuan-Kuei/react-winmine.git",
     "style-loader": "^0.23.1",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",

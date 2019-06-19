@@ -30,12 +30,11 @@ const Brick = ({
     wrong,
     broken,
     danger,
-    mine,
+    mine: broken && mine,
     flag: marked,
     container: true,
     [fontColorStyle]: broken
   });
-
   return (
     <div
       styleName={styleName}
@@ -51,7 +50,9 @@ Brick.defaultProps = {
   broken: false,
   marked: false,
   wrong: false,
-  danger: false
+  danger: false,
+  mine: false,
+  value: 0
 };
 
 Brick.propTypes = {

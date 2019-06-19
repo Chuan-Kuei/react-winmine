@@ -12,9 +12,9 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
       return p / mapSize;
     });
   };
-  const assertMapCorrect = (mineMap, minePosition) => {
+  const assertMapCorrect = (mineMap, minePositions) => {
     expect(mineMap).toHaveLength(width * height);
-    expect(minePosition).toHaveLength(mine);
+    expect(minePositions).toHaveLength(mine);
   };
 
   const createArraySequence = (from, to) => {
@@ -31,7 +31,7 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
       expect(mineMap[validatePosition[n]]).toEqual(0);
     });
   };
-  const assertMine = (mineMap, minePosition, expectList) => {
+  const assertMine = (mineMap, minePositions, expectList) => {
     const expectObj = expectList.reduce((result, v) => {
       return {
         [v]: -1
@@ -54,10 +54,10 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
 
   test("create correct map", () => {
     // When
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
+    const { mineMap, minePositions } = createMineMap(width, height, mine);
 
     // Then
-    assertMapCorrect(mineMap, minePosition);
+    assertMapCorrect(mineMap, minePositions);
   });
 
   test("mine position in first column , and tips correct", () => {
@@ -77,11 +77,11 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
     mockRandom(expectMinePosition);
 
     // When
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
+    const { mineMap, minePositions } = createMineMap(width, height, mine);
 
     // Then
-    assertMapCorrect(mineMap, minePosition);
-    assertMine(mineMap, minePosition, expectMinePosition);
+    assertMapCorrect(mineMap, minePositions);
+    assertMine(mineMap, minePositions, expectMinePosition);
     assertMapValue(mineMap, expectTips);
     assertEmptyBrick(mineMap, 18, 80);
   });
@@ -103,11 +103,11 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
     mockRandom(expectMinePosition);
 
     // When
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
+    const { mineMap, minePositions } = createMineMap(width, height, mine);
 
     // Then
-    assertMapCorrect(mineMap, minePosition);
-    assertMine(mineMap, minePosition, expectMinePosition);
+    assertMapCorrect(mineMap, minePositions);
+    assertMine(mineMap, minePositions, expectMinePosition);
     assertMapValue(mineMap, expectTips);
     assertEmptyBrick(mineMap, 0, 62);
   });
@@ -129,11 +129,11 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
     mockRandom(expectMinePosition);
 
     // When
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
+    const { mineMap, minePositions } = createMineMap(width, height, mine);
 
     // Then
-    assertMapCorrect(mineMap, minePosition);
-    assertMine(mineMap, minePosition, expectMinePosition);
+    assertMapCorrect(mineMap, minePositions);
+    assertMine(mineMap, minePositions, expectMinePosition);
     assertMapValue(mineMap, expectTips);
     assertEmptyBrick(mineMap, 2, 8);
     assertEmptyBrick(mineMap, 11, 17);
@@ -163,11 +163,11 @@ describe("Create MineMap 9*9 and mine 9 ", () => {
     mockRandom(expectMinePosition);
 
     // When
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
+    const { mineMap, minePositions } = createMineMap(width, height, mine);
 
     // Then
-    assertMapCorrect(mineMap, minePosition);
-    assertMine(mineMap, minePosition, expectMinePosition);
+    assertMapCorrect(mineMap, minePositions);
+    assertMine(mineMap, minePositions, expectMinePosition);
     assertMapValue(mineMap, expectTips);
     assertEmptyBrick(mineMap, 0, 6);
     assertEmptyBrick(mineMap, 9, 15);

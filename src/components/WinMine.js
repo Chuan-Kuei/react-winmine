@@ -36,8 +36,8 @@ const defaultState = {
   tens: 0,
   ones: 0,
   gameStatus: "smile",
-  minePosition: [],
-  flagPosition: [],
+  minePositions: [],
+  flagPositions: [],
   brokenCount: 0,
   leftMine: 10,
   timerTask: undefined
@@ -66,11 +66,11 @@ class WinMine extends React.Component {
 
   componentDidMount() {
     const { width, height, mine } = this.state;
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
+    const { mineMap, minePositions } = createMineMap(width, height, mine);
     const timerTask = setInterval(this.timer, 1000);
     this.setState({
       timerTask,
-      minePosition,
+      minePositions,
       mineMap: this.setMineMapAction(mineMap)
     });
   }
@@ -80,10 +80,10 @@ class WinMine extends React.Component {
     if (level !== prevLevel) {
       const { timerTask } = this.state;
       const { width, height, mine } = LEVEL_MAP[level];
-      const { mineMap, minePosition } = createMineMap(width, height, mine);
+      const { mineMap, minePositions } = createMineMap(width, height, mine);
       this.setState({
         ...defaultState,
-        minePosition,
+        minePositions,
         mineMap: this.setMineMapAction(mineMap),
         width,
         height,
@@ -114,13 +114,17 @@ class WinMine extends React.Component {
 
   setMineMapAction(mineMap) {
     return mineMap.reduce((mineObj, value, position) => {
-      const handleClick =
-        value === -1 ? this.handleClickMine : this.handleBrickBroken;
+      const isMine = value === Const.MINE;
+      const handleClick = isMine
+        ? this.handleClickMine
+        : this.handleBrickBroken;
       mineObj[position] = {
         isBroken: false,
         isMarked: false,
+        danger: false,
         wrong: false,
-        value,
+        value: isMine ? 0 : value,
+        mine: isMine,
         handleClick: R.curry(handleClick)(position),
         handleAddFlag: R.curry(this.handleAddFlag)(position)
       };
@@ -133,7 +137,7 @@ class WinMine extends React.Component {
       mineMap,
       gameStatus,
       brokenCount,
-      minePosition,
+      minePositions,
       timerTask
     } = this.state;
     const { value, isMarked, isBroken } = mineMap[position];
@@ -157,7 +161,7 @@ class WinMine extends React.Component {
       },
       () => {
         if (isFinishGame) {
-          this.addFlags(minePosition, mineMap);
+          this.addFlags(minePositions, mineMap);
         }
       }
     );
@@ -172,9 +176,9 @@ class WinMine extends React.Component {
   handleClickMine(position, e) {
     const {
       mineMap,
-      minePosition,
+      minePositions,
       gameStatus,
-      flagPosition,
+      flagPositions,
       timerTask
     } = this.state;
     if (mineMap[position]["isMarked"]) {
@@ -184,19 +188,22 @@ class WinMine extends React.Component {
     if (gameStatus === "lost") {
       return;
     }
-    minePosition.forEach(m => {
-      if (!mineMap[m]["isMarked"]) {
-        mineMap[m] = { ...mineMap[m], isBroken: true };
+
+    minePositions.forEach(mine => {
+      if (!mineMap[mine]["isMarked"]) {
+        mineMap[mine] = { ...mineMap[mine], isBroken: true };
       }
     });
-    mineMap[position] = { ...mineMap[position], isBroken: true, wrong: true };
-    const failFlags = R.without(minePosition, flagPosition);
+    mineMap[position] = { ...mineMap[position], isBroken: true, danger: true };
+    const failFlags = R.without(minePositions, flagPositions);
     failFlags.forEach(failPosition => {
       mineMap[failPosition] = {
         ...mineMap[failPosition],
-        value: -2,
+        value: 0,
         isBroken: true,
-        isMarked: false
+        isMarked: false,
+        mine: true,
+        wrong: true
       };
     });
     clearInterval(timerTask);
@@ -251,24 +258,24 @@ class WinMine extends React.Component {
   }
 
   addFlags(positions, mineMap) {
-    const { minePosition } = this.state;
+    const { minePositions } = this.state;
     positions.forEach(position => {
       mineMap[position] = { ...mineMap[position], isMarked: true };
     });
-    const leftMine = minePosition.length - positions.length;
+    const leftMine = minePositions.length - positions.length;
     this.setState({
       mineMap,
       leftMine,
-      flagPosition: positions
+      flagPositions: positions
     });
   }
 
   handleAddFlag(position, e) {
     e.preventDefault();
-    const { mineMap, flagPosition, minePosition, gameStatus } = this.state;
+    const { mineMap, flagPositions, minePositions, gameStatus } = this.state;
     const { isBroken, isMarked } = mineMap[position];
-    const flagSize = flagPosition.length;
-    const mineSize = minePosition.length;
+    const flagSize = flagPositions.length;
+    const mineSize = minePositions.length;
     if (
       isBroken ||
       (mineSize === flagSize && !isMarked) ||
@@ -278,17 +285,17 @@ class WinMine extends React.Component {
     }
     mineMap[position] = { ...mineMap[position], isMarked: !isMarked };
     if (!isMarked) {
-      flagPosition.push(position);
+      flagPositions.push(position);
     } else {
-      flagPosition.splice(flagPosition.indexOf(position), 1);
+      flagPositions.splice(flagPositions.indexOf(position), 1);
     }
 
-    this.addFlags(flagPosition, mineMap);
+    this.addFlags(flagPositions, mineMap);
   }
 
   handleReset() {
     let { timerTask, leftMine, width, height, mine } = this.state;
-    const { mineMap, minePosition } = createMineMap(width, height, mine);
+    const { mineMap, minePositions } = createMineMap(width, height, mine);
 
     if (!timerTask) {
       timerTask = setInterval(this.timer, 1000);
@@ -302,8 +309,8 @@ class WinMine extends React.Component {
       width,
       height,
       mine,
-      minePosition,
-      flagPosition: []
+      minePositions,
+      flagPositions: []
     });
   }
 
@@ -325,17 +332,21 @@ class WinMine extends React.Component {
                 isBroken,
                 isMarked,
                 handleClick,
+                danger,
+                mine,
                 wrong,
                 handleAddFlag
               } = mineMap[m];
               return (
                 <Brick
                   key={m + index}
+                  mine={mine}
                   value={value}
                   broken={isBroken}
                   marked={isMarked}
-                  onClick={handleClick}
+                  danger={danger}
                   wrong={wrong}
+                  onClick={handleClick}
                   onContextMenu={handleAddFlag}
                 />
               );

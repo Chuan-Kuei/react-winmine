@@ -1,10 +1,9 @@
 import React from "react";
+import classNames from "classNames";
 import PropTypes from "prop-types";
 
 import "./brick.css";
 const VALUE_STYLE_MAP = {
-  "-2": "wrong_mine",
-  "-1": "mine",
   0: "zero",
   1: "one",
   2: "two",
@@ -20,32 +19,30 @@ const Brick = ({
   broken,
   marked,
   wrong,
+  mine,
+  danger,
   onClick: handleBrickBroken,
   onContextMenu: handleAddFlag,
   value
 }) => {
-  const styles = ["container"];
-  const valueShow = value === -1 || value === -2 ? "" : value;
-  if (broken) {
-    const fontColorStyle = VALUE_STYLE_MAP[value] ? VALUE_STYLE_MAP[value] : "";
-    styles.push(fontColorStyle);
-    styles.push("broken");
-  }
-  if (marked) {
-    styles.push("flag");
-  }
-  if (wrong) {
-    styles.push("wrong");
-  }
+  const fontColorStyle = VALUE_STYLE_MAP[value];
+  const styleName = classNames({
+    wrong,
+    broken,
+    danger,
+    mine,
+    flag: marked,
+    container: true,
+    [fontColorStyle]: broken
+  });
 
-  const styleName = styles.join(" ");
   return (
     <div
       styleName={styleName}
       onClick={handleBrickBroken}
       onContextMenu={handleAddFlag}
     >
-      {broken && <span>{valueShow}</span>}
+      {broken && <span>{value}</span>}
     </div>
   );
 };
@@ -53,13 +50,16 @@ const Brick = ({
 Brick.defaultProps = {
   broken: false,
   marked: false,
-  wrong: false
+  wrong: false,
+  danger: false
 };
 
 Brick.propTypes = {
   broken: PropTypes.bool,
   marked: PropTypes.bool,
   wrong: PropTypes.bool,
+  mine: PropTypes.bool,
+  danger: PropTypes.bool,
   onClick: PropTypes.func,
   onContextMenu: PropTypes.func,
   value: PropTypes.number

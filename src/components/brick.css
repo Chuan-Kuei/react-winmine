@@ -39,14 +39,11 @@
       background-image: url("../assets/mine.png");
       background-position: center;
       background-size: contain;
-      &.wrong {
+      &.danger {
         background-color: red;
       }
     }
-    &.wrong_mine {
-      background-image: url("../assets/mine.png");
-      background-position: center;
-      background-size: contain;
+    &.wrong {
       &::after {
         content: "x";
         color: red;

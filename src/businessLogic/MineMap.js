@@ -1,3 +1,4 @@
+import Const from "../components/Const";
 const createMine = (width, height, maxMine) => {
   const mine = {};
   const mapSize = width * height;
@@ -12,9 +13,9 @@ const isOutofMap = (maxPosition, position) => {
   return position >= maxPosition || position < 0;
 };
 
-const validateBoundary = (minePosition, width) => {
-  const isLeftBoundary = minePosition % width === 0;
-  const isRightBoundary = (minePosition + 1) % width === 0;
+const validateBoundary = (minePositions, width) => {
+  const isLeftBoundary = minePositions % width === 0;
+  const isRightBoundary = (minePositions + 1) % width === 0;
   const leftLimit = ["left", "leftTop", "leftBottom"];
   const rightLimit = ["right", "rightTop", "rightBottom"];
   return position => {
@@ -26,21 +27,21 @@ const validateBoundary = (minePosition, width) => {
 };
 
 const createTips = (mineMap, minePositionList, width) => {
-  return minePositionList.reduce((result, minePosition) => {
-    const isLeftBoundary = minePosition % width === 0;
-    const isRightBoundary = (minePosition + 1) % width === 0;
+  return minePositionList.reduce((result, minePositions) => {
+    const isLeftBoundary = minePositions % width === 0;
+    const isRightBoundary = (minePositions + 1) % width === 0;
     const maxPosition = mineMap.length;
-    const isCloseBoundary = validateBoundary(minePosition, width);
-    result[minePosition] = -1;
+    const isCloseBoundary = validateBoundary(minePositions, width);
+    result[minePositions] = Const.MINE;
     const tipPositionList = {
-      top: minePosition - width,
-      bottom: minePosition + width,
-      leftTop: minePosition - width - 1,
-      left: minePosition - 1,
-      leftBottom: minePosition + width - 1,
-      rightTop: minePosition - width + 1,
-      right: minePosition + 1,
-      rightBottom: minePosition + width + 1
+      top: minePositions - width,
+      bottom: minePositions + width,
+      leftTop: minePositions - width - 1,
+      left: minePositions - 1,
+      leftBottom: minePositions + width - 1,
+      rightTop: minePositions - width + 1,
+      right: minePositions + 1,
+      rightBottom: minePositions + width + 1
     };
 
     Object.keys(tipPositionList)
@@ -55,7 +56,7 @@ const createTips = (mineMap, minePositionList, width) => {
 };
 
 const createTip = mapValue => {
-  if (mapValue !== undefined && mapValue !== -1) {
+  if (mapValue !== undefined && mapValue !== Const.MINE) {
     return mapValue + 1;
   }
   return mapValue;
@@ -67,11 +68,11 @@ const initMineMap = (width, height) => {
 
 const createMineMap = (width, height, maxMine) => {
   const emptyMineMap = initMineMap(width, height);
-  const minePosition = createMine(width, height, maxMine);
-  const mineMap = createTips(emptyMineMap, minePosition, width);
+  const minePositions = createMine(width, height, maxMine);
+  const mineMap = createTips(emptyMineMap, minePositions, width);
   return {
     mineMap,
-    minePosition
+    minePositions
   };
 };
 

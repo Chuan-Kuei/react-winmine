@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 
 import "./statucBrick.css";
 
-const StatusBrick = ({ status, onClick: handleClick }) => {
-  const handleRightClick = e => {
-    e.preventDefault();
-    return false;
-  };
+const StatusBrick = ({
+  status,
+  onClick: handleClick,
+  onContextMenu: handleRightClick
+}) => {
   return (
     <div
       styleName={`container ${status}`}
@@ -18,11 +18,15 @@ const StatusBrick = ({ status, onClick: handleClick }) => {
 };
 
 StatusBrick.defaultProps = {
-  status: "smile"
+  status: "smile",
+  onContextMenu: e => {
+    e.preventDefault();
+  }
 };
 StatusBrick.propTypes = {
   status: PropTypes.oneOf(["smile", "winner", "lost"]),
-  onClick: PropTypes.func
+  onClick: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func
 };
 
 export default StatusBrick;
